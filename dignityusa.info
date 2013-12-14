@@ -1,0 +1,7 @@
+; $Id$
+name = dignityusa
+description = Module for hooks into DignityUSA Membership Database
+;dependencies[] = 
+core = 7.x
+dependencies[] = civicrm
+
