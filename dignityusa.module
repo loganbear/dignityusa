@@ -181,7 +181,7 @@ function dignityusa_civicrm_pre( $op, $objectName, $id, &$params ) {
 
 
 function dignityusa_civicrm_buildForm( $formName, &$form ) {
-    if ($form->getVar('_id') == 3 || $form->getVar('_id') == 36 ) {
+    if ($form->getVar('_id') == 3) {
        if ( $formName == 'CRM_Contribute_Form_Contribution_Main')  {
 //            CRM_Core_Error::debug('Form', $form);
 //            exit;
@@ -214,7 +214,7 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
             
         } 
     }  
-    elseif ($form->getVar('_id') == 31 ) {
+/*    elseif ($form->getVar('_id') == 31 ) {
         $chNum = $_GET["chNum"];
         if ($chNum) {
             $params = array('version' => 3,
@@ -227,7 +227,7 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
                 $form['custom_33']->setValue($result['value']);
             }
         }
-    }
+    }  */
 }
 
 /**
