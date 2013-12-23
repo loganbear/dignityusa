@@ -42,9 +42,10 @@
  * Returns
  * None
  */
+
 function dignityusa_civicrm_pre( $op, $objectName, $id, &$params ) {    
     if ( $objectName == 'LineItem' && $op == 'create' ) {
-         if ( $params["financial_type_id"] == 2 && ( $params['line_total'] = 50 || $params['line_total'] == 100 )) {
+         if ( $params["financial_type_id"] == 2 && ( $params['unit_price'] == 50 || $params['unit_price'] == 100 )) {
             // Look for Contribution
             $apiParams = array('version'    => 3,
                                'sequential' => 1,
@@ -97,26 +98,26 @@ function dignityusa_civicrm_pre( $op, $objectName, $id, &$params ) {
                 // Find line item record for membership
                         
                 // Remove Chapter share of membership
-                if ($params['line_total'] == 50 ) {  // Single
+                if ($params['unit_price'] == 50 ) {  // Single
                     $amtChg = $chapterShare;
-                    $params['price_field_id'] = 93;
-                    $params['price_field_value_id'] = 226;
+                    $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
+                    $params['price_field_value_id'] = 241;   // value for Single (civicrm_price_field_value_id)
                 } elseif ($params['unit_price'] == 100 ) {  // Couple
                     $amtChg = $chapterShare * 2;
-                    $params['price_field_id'] = 93;
-                    $params['price_field_value_id'] = 227;
+                    $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
+                    $params['price_field_value_id'] = 242;   // value for Couple (civicrm_price_field_value_id)
                 } else {
                     $amtChg = 0;
                 }
                 
                 if ( $amtChg != 0 ) {
-                    $params['line_total'] = $params['line_total'] - $amtChg;
+                    $params['line_total'] = $params['unit_price'] - $amtChg;
                     $params['unit_price'] = $params['line_total'];
                     $params['qty'] = 1;
                     $newParams = array('line_total'             => $amtChg,
                                        'unit_price'             => $amtChg,
-                                       'price_field_value_id'   => 230,
-                                       'price_field_id'         => 96,
+                                       'price_field_value_id'   => 243,     // value for Chapter Member (civicrm_price_field_value_id)
+                                       'price_field_id'         => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
                                        'label'                  => $chapterName,
                                        'financial_type_id'      => 8,
                                        'field_title'            => 'Chapter Membership',
@@ -247,7 +248,7 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
 
 function dignityusa_civicrm_postProcess( $formName, &$form) {
     if ( $formName == 'CRM_Contribute_Form_Contribution_Confirm') {
-        if ($form->getVar('_id') == 3 || $form->getVar('_id') == 36) {
+        if ($form->getVar('_id') == 3 ) {
 //           CRM_Core_Error::debug('Form', $form);
 //           exit;
             // Set up spousal relationship
@@ -258,6 +259,7 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
                 $sEmail = $form->_params["spouseEmail"];
                 // check for the spouse record
                 $params = array('version' => 3,
+                                'sequential' => 1,
                                 'first_name' => $sFirst,
                                 'last_name' => $sLast,
                                 'email' => $sEmail,
@@ -294,7 +296,7 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
                 // See if contact is contact a
                 $params = array('version' => 3,
                                 'sequential' => 1,
-                                'contact_id_a' => $cid,
+                                'contact_id_a' => $cId,
                                 'contact_id_b' => $sID,
                                 'relationship_type_id' => 2,
                                 );
@@ -304,17 +306,17 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
                     $params = array('version' => 3,
                                     'sequential' => 1,
                                     'contact_id_a' => $sID,
-                                    'contact_id_b' => $cid,
+                                    'contact_id_b' => $cId,
                                     'relationship_type_id' => 2,
                                     );
                     $result = civicrm_api('Relationship', 'get', $params);
                     if ( $result['count'] == 0) {
                         $params = array('version' => 3,
                                         'sequential' => 1,
-                                        'contact_id_a' => $cid,
+                                        'contact_id_a' => $cId,
                                         'contact_id_b' => $sID,
                                         'relationship_type_id' => 2,
-                                        );                        
+                                        );
                         $result = civicrm_api('Relationship', 'create', $params);                        
                     }
                 }
@@ -341,8 +343,8 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
 function dignityusa_civicrm_validateForm( $formName, &$fields, &$files, &$form, &$errors ) {
     if ( $formName == 'CRM_Contribute_Form_Contribution_Main') {
         $fId = $form->getVar('_id');
-        if ($fId == 3 || $fId == 36 || $fId == 37 ) {
-            if ($fields['price_10'] == 25) {
+        if ($fId == 3 ) {
+            if ($fields['price_97'] == 25) {
                 if ( strlen(trim($fields['spouseFirstName'])) == 0 ) {
                     $errors['spouseFirstName'] = ts('Spouse First Name required for Couple Membership');
                 }
