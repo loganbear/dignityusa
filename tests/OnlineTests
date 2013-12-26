@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="content-type" />
+  <title>Test Suite</title>
+</head>
+<body>
+<table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
+<tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="Civi2.test">First Name</a></td></tr>
+<tr><td><a href="Civi2.test">Second Person</a></td></tr>
+<tr><td><a href="Civi3.test">Third People</a></td></tr>
+<tr><td><a href="Civi4.test">Mary Fourth</a></td></tr>
+<tr><td><a href="Civi5.test">Five Test</a></td></tr>
+<tr><td><a href="Civi6.test">Steve Six</a></td></tr>
+<tr><td><a href="Civi7.test">First Couple</a></td></tr>
+<tr><td><a href="Civi8.test">Double Stuff</a></td></tr>
+<tr><td><a href="Civi9.test">Theda Third</a></td></tr>
+<tr><td><a href="Civi10.test">Fred Forth</a></td></tr>
+<tr><td><a href="Civi11.test">Frieda Five</a></td></tr>
+<tr><td><a href="Civi12.test">Sadie Sixth</a></td></tr>
+<tr><td><a href="Civi13.test">Cathy Catholic</a></td></tr>
+<tr><td><a href="Civi14.test">Elainie Us</a></td></tr>
+<tr><td><a href="Civi15.test">Oscar Other</a></td></tr>
+<tr><td><a href="Civi16.test">Peter Parker</a></td></tr>
+</tbody></table>
+</body>
+</html>

@@ -1,8 +1,10 @@
 <?php
-//
-// TODO: Monthly donations go to Guardian Angel financial account.
-//
-// $Id$
+
+/**
+ * @file
+ * Special customization for DignityUSA and CiviCRM
+ **/
+
 /**
  * This hook is called after a db write on some core objects.
  *
@@ -24,10 +26,12 @@
  *      'Relationship'
  *      'Activity'
  *      'Contribution'
- *      'Profile' (while this is not really an object, people have expressed an interest to perform an action when a profile is created/edited)
+ *      'Profile' (while this is not really an object,
+ *                 people have expressed an interest to perform an action when a profile is created/edited)
  *      'Membership'
  *      'Participant'
- *      'UFMatch' (when an object is linked to a CMS user record, at the request of GordonH. A UFMatch object is passed for both the pre and post hooks)
+ *      'UFMatch' (when an object is linked to a CMS user record, at the request of GordonH.
+ *                 A UFMatch object is passed for both the pre and post hooks)
  *      'Event'
  *      'EntityTag'
  *      'Tag'
@@ -43,7 +47,8 @@
  * None
  */
 
-function dignityusa_civicrm_pre( $op, $objectName, $id, &$params ) {    
+function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
+{
     if ( $objectName == 'LineItem' && $op == 'create' ) {
          if ( $params["financial_type_id"] == 2 && ( $params['unit_price'] == 50 || $params['unit_price'] == 100 )) {
             // Look for Contribution
@@ -317,7 +322,10 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
                                         'contact_id_b' => $sID,
                                         'relationship_type_id' => 2,
                                         );
-                        $result = civicrm_api('Relationship', 'create', $params);                        
+                        $result = civicrm_api('Relationship', 'create', $params);
+                        // TODO: Check for couple membership creation
+                        // Steps: Find membership for $cId
+                        //        Create $sId membership with $cId's membership id as owner_membership_id
                     }
                 }
             }
@@ -511,44 +519,42 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
         
         // Now for total current year
         
-        if (in_array('total_current', $tokens['donor'])) {
-            $contacts = implode(',', $cids);
-            $dao = &CRM_Core_DAO::executeQuery("SELECT contact_id,
-            sum( total_amount ) as total_amount
-            FROM   civicrm_contribution cc
-            LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id ) 
-            WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
-        AND (YEAR(cc.receive_date) = YEAR(NOW())) and cc.contact_id IN ($contacts)
-            GROUP BY contact_id     "
-            ); 
-            
-            while ($dao->fetch()) {
-                $cid = $dao->contact_id;
-                $values[$cid]['donor.total_current'] = $dao->total_amount;
-        }
+            if (in_array('total_current', $tokens['donor'])) {
+                $contacts = implode(',', $cids);
+                $dao = &CRM_Core_DAO::executeQuery("SELECT contact_id,
+                sum( total_amount ) as total_amount
+                FROM   civicrm_contribution cc
+                LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id ) 
+                WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
+            AND (YEAR(cc.receive_date) = YEAR(NOW())) and cc.contact_id IN ($contacts)
+                GROUP BY contact_id     "
+                ); 
+                
+                while ($dao->fetch()) {
+                    $cid = $dao->contact_id;
+                    $values[$cid]['donor.total_current'] = $dao->total_amount;
+            }
             
  
-    }
+        }
     // Now for total prior year
         
-        if (in_array('total_prior', $tokens['donor'])) {
-            $contacts = implode(',', $cids);
-            $dao = &CRM_Core_DAO::executeQuery("SELECT contact_id,
-            sum( total_amount ) as total_amount
-            FROM   civicrm_contribution cc
-            LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id ) 
-            WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
-        AND (YEAR(cc.receive_date) = YEAR(NOW())-1) and cc.contact_id IN ($contacts)
-            GROUP BY contact_id     "
-            ); 
-            
-            while ($dao->fetch()) {
-                $cid = $dao->contact_id;
-                $values[$cid]['donor.total_prior'] = $dao->total_amount;
+            if (in_array('total_prior', $tokens['donor'])) {
+                $contacts = implode(',', $cids);
+                $dao = &CRM_Core_DAO::executeQuery(
+                                                   "SELECT contact_id,
+                                                   sum( total_amount ) as total_amount
+                                                   FROM   civicrm_contribution cc
+                                                   LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id )
+                                                   WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
+                                                   AND (YEAR(cc.receive_date) = YEAR(NOW())-1) and cc.contact_id IN ($contacts)
+                                                   GROUP BY contact_id"
+                                                   ); 
+
+                while ($dao->fetch()) {
+                    $cid = $dao->contact_id;
+                    $values[$cid]['donor.total_prior'] = $dao->total_amount;
+            }
         }
-            
- 
     }
-    }
-    
 }

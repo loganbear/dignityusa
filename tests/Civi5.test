@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://drupal7.local:8083/" />
+<title>Five Test</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Five Test</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contribute/transact?reset=1&amp;id=3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_237_22</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-5</td>
+	<td>five.test@net.net</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Five</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Test</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=street_address-Primary</td>
+	<td>567 Parkins Park</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=city-Primary</td>
+	<td>Chicago</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=postal_code-Primary</td>
+	<td>60609</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=country-Primary</td>
+	<td>label=United States</td>
+</tr>
+<tr>
+	<td>pause</td>
+	<td>3000</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=state_province-Primary</td>
+	<td>label=Illinois</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=phone-Primary-1</td>
+	<td>787-345-2186</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_2_4</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_0_10</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=do_not_trade</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=custom_40_Defenders</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=custom_40_Women's Caucus</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=custom_40_Marketing Committee</td>
+	<td></td>
+</tr>
+<tr>
+	<td>addSelection</td>
+	<td>id=custom_1-f</td>
+	<td>label=Dignity/Chicago</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=add</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_0_payment_processor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_1_12</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=contribution_note</td>
+	<td>What is this for?</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Main_upload-bottom</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Confirm_next-top</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>
