@@ -352,7 +352,9 @@ function dignityusa_civicrm_validateForm( $formName, &$fields, &$files, &$form, 
     if ( $formName == 'CRM_Contribute_Form_Contribution_Main') {
         $fId = $form->getVar('_id');
         if ($fId == 3 ) {
-            if ($fields['price_97'] == 25) {
+//            CRM_Core_Error::Debug('Fields',$fields);
+//            exit;    238
+            if ($fields['price_97'] == 238) {
                 if ( strlen(trim($fields['spouseFirstName'])) == 0 ) {
                     $errors['spouseFirstName'] = ts('Spouse First Name required for Couple Membership');
                 }
@@ -362,6 +364,9 @@ function dignityusa_civicrm_validateForm( $formName, &$fields, &$files, &$form, 
                 if ( strlen(trim($fields['spouseEmail'])) == 0) {
                     $errors['spouseEmail'] = ts('Spouse Email required for Couple Membership');
                 }
+            }
+            if (($fields['price_99'] != 0) && ($fields['price_97'] != 0) ) {
+                $errors['price_99'] = ts('If you use the Additional Contribution field, please select No Thank You for Membership');
             }
         }
         
