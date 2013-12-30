@@ -62,6 +62,11 @@
 	<td>label=United States</td>
 </tr>
 <tr>
+	<td>waitForText</td>
+	<td>id=state_province-Primary</td>
+	<td>- select a state -AlabamaAlaskaAmerican SamoaArizonaArkansasArmed Forces AmericasArmed Forces EuropeArmed Forces PacificCaliforniaColoradoConnecticutDelawareDistrict of ColumbiaFloridaGeorgiaGuamHawaiiIdahoIllinoisIndianaIowaKansasKentuckyLouisianaMaineMarylandMassachusettsMichiganMinnesotaMississippiMissouriMontanaNebraskaNevadaNew HampshireNew JerseyNew MexicoNew YorkNorth CarolinaNorth DakotaNorthern Mariana IslandsOhioOklahomaOregonPennsylvaniaPuerto RicoRhode IslandSouth CarolinaSouth DakotaTennesseeTexasUnited States Minor Outlying IslandsUtahVermontVirgin IslandsVirginiaWashingtonWest VirginiaWisconsinWyoming</td>
+</tr>
+<tr>
 	<td>select</td>
 	<td>id=state_province-Primary</td>
 	<td>label=Ohio</td>
@@ -146,7 +151,6 @@
 	<td>id=_qf_Confirm_next-top</td>
 	<td></td>
 </tr>
-
 </tbody></table>
 </body>
 </html>

@@ -8,7 +8,7 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
-<tr><td><a href="Civi2.test">First Name</a></td></tr>
+<tr><td><a href="Civi1.test">First Name</a></td></tr>
 <tr><td><a href="Civi2.test">Second Person</a></td></tr>
 <tr><td><a href="Civi3.test">Third People</a></td></tr>
 <tr><td><a href="Civi4.test">Mary Fourth</a></td></tr>
