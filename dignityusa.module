@@ -325,6 +325,33 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
                         $result = civicrm_api('Relationship', 'create', $params);
                         // TODO: Check for couple membership creation
                         // Steps: Find membership for $cId
+                        $params = array('version' => 3,
+                                        'sequential' => 1,
+                                        'membership_contact_id' => $cId,
+                                        );
+                        $result = civicrm_api('Membership', 'getsingle', $params);
+                        if ( $result["membership_type_id"] == 2 ) {
+                            $params = array('version' => 3,
+                                            'sequential' => 1,
+                                            'membership_contact_id' => $sID,
+                                            'membership_type_id' => 2,
+                                            'membership_source' => $result['source'],
+                                            'status_id' => $result["status_id"],
+                                            'member_is_pay_later' => $result['is_pay_later'],
+                                            'owner_membership_id' => $result['id'],
+                                            'skipStatusCal' => 1,
+                                            );
+                            if ( isset($result['join_date'] )) {
+                                $params["join_date"] = $result["join_date"];
+                                $params["start_date"] = $result["start_date"];
+                                $params["end_date"] = $result["end_date"];
+                            } else {
+                                $params["join_date"] = NULL;
+                                $params["end_date"] = NULL;
+                                $params["start_date"] = NULL;
+                            }
+                            $res2 = civicrm_api('Membership', 'create', $params);
+                        }
                         //        Create $sId membership with $cId's membership id as owner_membership_id
                     }
                 }
