@@ -1,0 +1,951 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://drupal7.local:8083/" />
+<title>Civi00</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Civi00</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Bruce</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Banner</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>bruce.banner@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Henry</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Pym</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>henry.pym@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Janet</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Van Dyne</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>janet.vandyne@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Iris</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Allen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>iris.allen@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Clark</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Kent</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>clark.kent@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Lisa</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Douglas</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>lisa.douglas@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contact/add?reset=1&amp;ct=Individual</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Elyse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Keaton</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email_1_email</td>
+	<td>elyse.keaton@net.net</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Contact_upload_view-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Betsy</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Ross</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>betsy.ross@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Barry</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Allen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>barry.allen@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Lois</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Lane</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>lois.lane@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Rob</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Petrie</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>rob.petrie@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Laura</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Petrie</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>laura.petrie@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Will</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Truman</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>will.truman@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Couple</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Clint</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Barton</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>clint.barton@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Couple</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Ward</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Cleaver</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>ward.cleaver@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Couple</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Carol</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Brady</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>carol.brady@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>open</td>
+	<td>/civicrm/member/add?reset=1&amp;action=add&amp;context=standalone</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>//body/div[7]/div</td>
+	<td>Create New Contactclose</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Jason</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Seaver</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>jason.seaver@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=membership_type_id_1</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=membership_type_id_1</td>
+	<td>label=Single</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=record_contribution</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Membership_upload-top</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=sort_name_navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=sort_name_navigation</td>
+	<td>truman, will</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_qf_Advanced_refresh</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=ui-id-6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>css=div.action-link &gt; a.button &gt; span</td>
+	<td>Add Relationship</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=div.action-link &gt; a.button &gt; span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=relationship_type_id</td>
+	<td>label=Spouse of</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>id=ui-id-1</td>
+	<td>Create New Contact</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Grace</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Adler</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>grace.adler@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=quick-save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=sort_name_navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=sort_name_navigation</td>
+	<td>barton, clint</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_qf_Advanced_refresh</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=ui-id-6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>css=div.action-link &gt; a.button &gt; span</td>
+	<td>Add Relationship</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=div.action-link &gt; a.button &gt; span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=relationship_type_id</td>
+	<td>label=Spouse of</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>id=ui-id-1</td>
+	<td>Create New Contact</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Natasha</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Romanof</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>natasha.romanof@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=quick-save</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=sort_name_navigation</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=sort_name_navigation</td>
+	<td>cleaver, ward</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>name=_qf_Advanced_refresh</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=ui-id-6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>css=div.action-link &gt; a.button &gt; span</td>
+	<td>Add Relationship</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>css=div.action-link &gt; a.button &gt; span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=relationship_type_id</td>
+	<td>label=Spouse of</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=profiles_1</td>
+	<td>label=New Individual</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>id=ui-id-1</td>
+	<td>Create New Contact</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>June</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Cleaver</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-Primary</td>
+	<td>june.cleaver@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=_qf_Edit_next</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=quick-save</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
