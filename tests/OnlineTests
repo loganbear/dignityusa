@@ -8,6 +8,7 @@
 <body>
 <table id="suiteTable" cellpadding="1" cellspacing="1" border="1" class="selenium"><tbody>
 <tr><td><b>Test Suite</b></td></tr>
+<tr><td><a href="Civi00.test">Setup (Run when logged in)</a></td></tr>
 <tr><td><a href="Civi1.test">First Name</a></td></tr>
 <tr><td><a href="Civi2.test">Second Person</a></td></tr>
 <tr><td><a href="Civi3.test">Third People</a></td></tr>
@@ -26,7 +27,19 @@
 <tr><td><a href="Civi16.test">Peter Parker</a></td></tr>
 <tr><td><a href="Civi17.test">Reed Richards</a></td></tr>
 <tr><td><a href="Civi18.test">Ben Grimm</a></td></tr>
-<tr><td><a href="Civi00.test">Setup (Run when logged in)</a></td></tr>
+<tr><td><a href="Civi19.test">Bruce Banner</a></td></tr>
+<tr><td><a href="Civi20.test">Betsy Ross</a></td></tr>
+<tr><td><a href="Civi21.test">Henry Pym</a></td></tr>
+<tr><td><a href="Civi22.test">Barry Allen</a></td></tr>
+<tr><td><a href="Civi23.test">Clark Kent</a></td></tr>
+<tr><td><a href="Civi24.test">Rob Petrie</a></td></tr>
+<tr><td><a href="Civi25.test">Will Truman</a></td></tr>
+<tr><td><a href="Civi26.test">Natasha Romanof</a></td></tr>
+<tr><td><a href="Civi27.test">Ward Cleaver</a></td></tr>
+<tr><td><a href="Civi28.test">Mike Brady</a></td></tr>
+<tr><td><a href="Civi29.test">Elyse Keaton</a></td></tr>
+<tr><td><a href="Civi30.test">Jason Seaver</a></td></tr>
+<tr><td><a href="Civi31.test">Oliver Douglas</a></td></tr>
 </tbody></table>
 </body>
 </html>

@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://drupal7.local:8083/" />
+<title>First Couple</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Elyse Keaton</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contribute/transact?reset=1&amp;id=3</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_238_24</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='priceset']/div/div[2]/div[2]/span/label/span</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Elyse</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Keaton</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-5</td>
+	<td>elyse.keaton@net.net</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=spouseFirstName</td>
+	<td>Stephen</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=spouseLastName</td>
+	<td>Keaton</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=spouseEmail</td>
+	<td>stephen.keaton@net.net</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=street_address-Primary</td>
+	<td>399 Family Ties</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=city-Primary</td>
+	<td>Billings</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=postal_code-Primary</td>
+	<td>78832</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=country-Primary</td>
+	<td>label=United States</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>id=state_province-Primary</td>
+	<td>- select a state -AlabamaAlaskaAmerican SamoaArizonaArkansasArmed Forces AmericasArmed Forces EuropeArmed Forces PacificCaliforniaColoradoConnecticutDelawareDistrict of ColumbiaFloridaGeorgiaGuamHawaiiIdahoIllinoisIndianaIowaKansasKentuckyLouisianaMaineMarylandMassachusettsMichiganMinnesotaMississippiMissouriMontanaNebraskaNevadaNew HampshireNew JerseyNew MexicoNew YorkNorth CarolinaNorth DakotaNorthern Mariana IslandsOhioOklahomaOregonPennsylvaniaPuerto RicoRhode IslandSouth CarolinaSouth DakotaTennesseeTexasUnited States Minor Outlying IslandsUtahVermontVirgin IslandsVirginiaWashingtonWest VirginiaWisconsinWyoming</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=state_province-Primary</td>
+	<td>label=Montana</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=phone-Primary-1</td>
+	<td>473-676-7922</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_1_8</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_1_payment_processor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=credit_card_number</td>
+	<td>4111111111111111</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=cvv2</td>
+	<td>111</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=credit_card_exp_date_M</td>
+	<td>label=Feb</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=credit_card_exp_date_Y</td>
+	<td>label=2015</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=billingcheckbox</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Main_upload-bottom</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Confirm_next-top</td>
+	<td></td>
+</tr>
+</tbody></table>
+</body>
+</html>
