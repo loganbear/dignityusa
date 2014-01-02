@@ -195,7 +195,7 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
             $form->add('text', 'spouseFirstName', ts('Spouse First Name'));
             $form->add('text', 'spouseLastName', ts('Spouse Last Name'));
             $form->add('text', 'spouseEmail', ts('Spouse Email'));
-            $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');
+            $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');  
         }
         elseif
         (( $formName == 'CRM_Contribute_Form_Contribution_Confirm') ||

@@ -122,6 +122,16 @@
 	<td>label=2015</td>
 </tr>
 <tr>
+	<td>addSelection</td>
+	<td>id=custom_1-f</td>
+	<td>label=Dignity/Northern Virginia</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=add</td>
+	<td></td>
+</tr>
+<tr>
 	<td>click</td>
 	<td>id=billingcheckbox</td>
 	<td></td>

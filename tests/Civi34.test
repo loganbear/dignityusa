@@ -1,0 +1,182 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head profile="http://selenium-ide.openqa.org/profiles/test-case">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<link rel="selenium.base" href="http://drupal7.local:8083/" />
+<title>Tony Stark</title>
+</head>
+<body>
+<table cellpadding="1" cellspacing="1" border="1">
+<thead>
+<tr><td rowspan="1" colspan="3">Tony Stark</td></tr>
+</thead><tbody>
+<tr>
+	<td>open</td>
+	<td>/civicrm/contribute/transact?reset=1&amp;id=35</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=price_103</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_0_20</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=price_103</td>
+	<td>5000</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=email-5</td>
+	<td>tony.stark@net.net</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=is_for_organization</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=onbehalf_organization_name</td>
+	<td>Start International</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=onbehalf_phone-3-1</td>
+	<td>623-555-2343</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=onbehalf_email-3</td>
+	<td>si@net.net</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=onbehalf_street_address-3</td>
+	<td>123 Marie Stark Avenue</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=onbehalf_city-3</td>
+	<td>Los Angeles</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=onbehalf_postal_code-3</td>
+	<td>14633</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=onbehalf_country-3</td>
+	<td>label=United States</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>id=onbehalf_state_province-3</td>
+	<td>- select a state -AlabamaAlaskaAmerican SamoaArizonaArkansasArmed Forces AmericasArmed Forces EuropeArmed Forces PacificCaliforniaColoradoConnecticutDelawareDistrict of ColumbiaFloridaGeorgiaGuamHawaiiIdahoIllinoisIndianaIowaKansasKentuckyLouisianaMaineMarylandMassachusettsMichiganMinnesotaMississippiMissouriMontanaNebraskaNevadaNew HampshireNew JerseyNew MexicoNew YorkNorth CarolinaNorth DakotaNorthern Mariana IslandsOhioOklahomaOregonPennsylvaniaPuerto RicoRhode IslandSouth CarolinaSouth DakotaTennesseeTexasUnited States Minor Outlying IslandsUtahVermontVirgin IslandsVirginiaWashingtonWest VirginiaWisconsinWyoming</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=onbehalf_state_province-3</td>
+	<td>label=California</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=first_name</td>
+	<td>Tony</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=last_name</td>
+	<td>Stark</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=is_opt_out</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>id=CIVICRM_QFID_1_payment_processor</td>
+	<td></td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=credit_card_number</td>
+	<td>4111111111111111</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=cvv2</td>
+	<td>111</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=credit_card_exp_date_M</td>
+	<td>label=Apr</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=credit_card_exp_date_Y</td>
+	<td>label=2017</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=billing_first_name</td>
+	<td>Anthony</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=billing_last_name</td>
+	<td>Stark</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=billing_street_address-5</td>
+	<td>583 Broadway Avenue</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=billing_city-5</td>
+	<td>Long Island</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=billing_country_id-5</td>
+	<td>label=United States</td>
+</tr>
+<tr>
+	<td>waitForText</td>
+	<td>id=billing_state_province_id-5</td>
+	<td>- select a state -AlabamaAlaskaAmerican SamoaArizonaArkansasArmed Forces AmericasArmed Forces EuropeArmed Forces PacificCaliforniaColoradoConnecticutDelawareDistrict of ColumbiaFloridaGeorgiaGuamHawaiiIdahoIllinoisIndianaIowaKansasKentuckyLouisianaMaineMarylandMassachusettsMichiganMinnesotaMississippiMissouriMontanaNebraskaNevadaNew HampshireNew JerseyNew MexicoNew YorkNorth CarolinaNorth DakotaNorthern Mariana IslandsOhioOklahomaOregonPennsylvaniaPuerto RicoRhode IslandSouth CarolinaSouth DakotaTennesseeTexasUnited States Minor Outlying IslandsUtahVermontVirgin IslandsVirginiaWashingtonWest VirginiaWisconsinWyoming</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=billing_state_province_id-5</td>
+	<td>label=New York</td>
+</tr>
+<tr>
+	<td>type</td>
+	<td>id=billing_postal_code-5</td>
+	<td>01232</td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Main_upload-bottom</td>
+	<td></td>
+</tr>
+<tr>
+	<td>clickAndWait</td>
+	<td>id=_qf_Confirm_next-bottom</td>
+	<td></td>
+</tr>
+
+</tbody></table>
+</body>
+</html>

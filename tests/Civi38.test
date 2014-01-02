@@ -4,81 +4,81 @@
 <head profile="http://selenium-ide.openqa.org/profiles/test-case">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <link rel="selenium.base" href="http://drupal7.local:8083/" />
-<title>Natasha Romanof</title>
+<title>Donald Blake</title>
 </head>
 <body>
 <table cellpadding="1" cellspacing="1" border="1">
 <thead>
-<tr><td rowspan="1" colspan="3">Natasha Romanof</td></tr>
+<tr><td rowspan="1" colspan="3">Donald Blake</td></tr>
 </thead><tbody>
 <tr>
 	<td>open</td>
-	<td>/civicrm/contribute/transact?reset=1&amp;id=3</td>
+	<td>/civicrm/contribute/transact?reset=1&amp;id=31</td>
 	<td></td>
 </tr>
 <tr>
 	<td>click</td>
-	<td>id=CIVICRM_QFID_237_22</td>
+	<td>id=CIVICRM_QFID_151_6</td>
+	<td></td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>//div[@id='priceset']/div/div[2]/div[2]/span/label/span[2]</td>
 	<td></td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=email-5</td>
-	<td>natasha.romanof@net.net</td>
+	<td>donald.blake@net.net</td>
+</tr>
+<tr>
+	<td>select</td>
+	<td>id=custom_5</td>
+	<td>label=Dignity/Arizona</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=first_name</td>
-	<td>Natasha</td>
+	<td>Donald</td>
 </tr>
 <tr>
 	<td>type</td>
 	<td>id=last_name</td>
-	<td>Romanof</td>
+	<td>Blake</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=street_address-Primary</td>
-	<td>250 Nicholas Blvd.</td>
+	<td>id=street_address-1</td>
+	<td>642 Asgard Avenue</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=city-Primary</td>
-	<td>Omaha</td>
+	<td>id=city-1</td>
+	<td>Laramie</td>
 </tr>
 <tr>
 	<td>type</td>
-	<td>id=postal_code-Primary</td>
-	<td>76222</td>
+	<td>id=postal_code-1</td>
+	<td>62743</td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>id=country-Primary</td>
+	<td>id=country-1</td>
 	<td>label=United States</td>
 </tr>
 <tr>
 	<td>waitForText</td>
-	<td>id=state_province-Primary</td>
+	<td>id=state_province-1</td>
 	<td>- select a state -AlabamaAlaskaAmerican SamoaArizonaArkansasArmed Forces AmericasArmed Forces EuropeArmed Forces PacificCaliforniaColoradoConnecticutDelawareDistrict of ColumbiaFloridaGeorgiaGuamHawaiiIdahoIllinoisIndianaIowaKansasKentuckyLouisianaMaineMarylandMassachusettsMichiganMinnesotaMississippiMissouriMontanaNebraskaNevadaNew HampshireNew JerseyNew MexicoNew YorkNorth CarolinaNorth DakotaNorthern Mariana IslandsOhioOklahomaOregonPennsylvaniaPuerto RicoRhode IslandSouth CarolinaSouth DakotaTennesseeTexasUnited States Minor Outlying IslandsUtahVermontVirgin IslandsVirginiaWashingtonWest VirginiaWisconsinWyoming</td>
 </tr>
 <tr>
 	<td>select</td>
-	<td>id=state_province-Primary</td>
-	<td>label=Nebraska</td>
+	<td>id=state_province-1</td>
+	<td>label=Wyoming</td>
 </tr>
 <tr>
 	<td>click</td>
 	<td>id=CIVICRM_QFID_1_payment_processor</td>
-	<td></td>
-</tr>
-<tr>
-	<td>addSelection</td>
-	<td>id=custom_1-f</td>
-	<td>label=Dignity/San Diego</td>
-</tr>
-<tr>
-	<td>click</td>
-	<td>name=add</td>
 	<td></td>
 </tr>
 <tr>
@@ -94,7 +94,7 @@
 <tr>
 	<td>select</td>
 	<td>id=credit_card_exp_date_M</td>
-	<td>label=Apr</td>
+	<td>label=Aug</td>
 </tr>
 <tr>
 	<td>select</td>
@@ -116,6 +116,7 @@
 	<td>id=_qf_Confirm_next-top</td>
 	<td></td>
 </tr>
+
 </tbody></table>
 </body>
 </html>

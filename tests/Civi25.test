@@ -72,6 +72,16 @@
 	<td></td>
 </tr>
 <tr>
+	<td>addSelection</td>
+	<td>id=custom_1-f</td>
+	<td>label=Dignity/New York</td>
+</tr>
+<tr>
+	<td>click</td>
+	<td>name=add</td>
+	<td></td>
+</tr>
+<tr>
 	<td>type</td>
 	<td>id=credit_card_number</td>
 	<td>4111111111111111</td>
