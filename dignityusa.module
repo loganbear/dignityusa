@@ -1,5 +1,6 @@
 <?php
 
+$custom_field = array('chapter_name' => 'custom_5');
 /**
  * @file
  * Special customization for DignityUSA and CiviCRM
@@ -172,9 +173,66 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                 }
             }
         }
-    }    
+    }
+/*    elseif ( $objectName == 'Contribution' && ( $op == 'create' || $op == 'edit')) {
+        if ( $params['financial_type_id'] == 2 ||
+             $params['financial_type_id'] == 7 ||
+             $params['financial_type_id'] == 8 ) {
+        CRM_Core_Error::debug('Contribution', $params);
+        CRM_Core_Error::debug('id', $id);
+        exit;
+            // Get Contact Record
+            $apiParams = array('version'    => 3,
+                               'contact_id' => $params['contact_id'],
+                               'return'     => 'custom_1',
+                               'sequential' => 1,
+                            );
+            $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
+            if ( isset($contactInfo["is_error"]) ) {
+                CRM_Core_Error::debug('Contact Get Params', $apiParams);
+                CRM_Core_Error::debug('Contact Get Result', $contactInfo);
+                exit;
+            }
+            $chapterName = $contactInfo["custom_1"]["0"];
+            require_once 'CRM/Core/BAO/CustomValueTable.php';
+            $set_params = array('entityID' => $id,
+                                $custom_field['chapter_name'] => $chapterName);
+            CRM_Core_BAO_CustomValueTable::setValues($set_params);
+        }
+    }
+*/
 }
 
+function dignityusa_civicrm_post($op, $objectName, $id, &$params) {
+    if ( $objectName == 'Contribution' && ( $op == 'create' || $op == 'edit')) {
+        $apiParams = array('version' => 3,
+                           'sequential' => 1,
+                           'id' => $id,
+                           );
+        $Contrib = civicrm_api('Contribution', 'getsingle', $apiParams);
+
+        if ($Contrib['financial_type_id'] == 7 || $Contrib['financial_type_id'] == 2 ) {
+            $apiParams = array('version' => 3,
+                               'sequential' => 1,
+                               'contact_id' => $Contrib['contact_id'],
+                               'return' => 'custom_1',
+                               );
+            $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
+            $chapterName = $contactInfo["custom_1"]["0"];
+//            CRM_Core_Error::debug('Chapter Name', $chapterName);
+//            CRM_Core_Error::debug('Contact Info', $contactInfo);
+//            CRM_Core_Error::debug('Contribution', $Contrib);
+//            exit;
+            $apiParams = array('version' => 3,
+                               'sequential' => 1,
+                               'entity_id' => $id,
+                               'custom_5' => $chapterName,
+                              );
+            $results=civicrm_api("CustomValue", "create", $apiParams);
+            
+        }
+    }
+}
 
 /**
  * This hook is invoked when building a CiviCRM form.
