@@ -505,7 +505,7 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
         SELECT cc.contact_id, cc.total_amount, cc.receive_date, cc.check_number, cc.source, con.display_name, hon.display_name as honoree, pi.label AS payment_instrument, ht.label AS honor_type, cType.name as contrib_type
         FROM civicrm_contribution cc
         INNER JOIN civicrm_contact con ON con.id = cc.contact_id
-        LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id ) 
+        LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id ) 
         LEFT JOIN civicrm_contact hon ON hon.id = cc.honor_contact_id
         LEFT JOIN civicrm_option_value pi ON cc.payment_instrument_id = pi.value AND pi.option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'payment_instrument')
         LEFT JOIN civicrm_option_value ht ON cc.honor_type_id = ht.value AND ht.option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'honor_type')
@@ -559,7 +559,7 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
         SELECT cc.contact_id, cc.total_amount, cc.receive_date, cc.check_number, cc.source, con.display_name, hon.display_name as honoree, pi.label AS payment_instrument, ht.label AS honor_type, cType.name as contrib_type
         FROM civicrm_contribution cc
         INNER JOIN civicrm_contact con ON con.id = cc.contact_id
-        LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id ) 
+        LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id ) 
         LEFT JOIN civicrm_contact hon ON hon.id = cc.honor_contact_id
         LEFT JOIN civicrm_option_value pi ON cc.payment_instrument_id = pi.value AND pi.option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'payment_instrument')
         LEFT JOIN civicrm_option_value ht ON cc.honor_type_id = ht.value AND ht.option_group_id = (SELECT id FROM civicrm_option_group WHERE name = 'honor_type')
@@ -614,7 +614,7 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
                 $dao = &CRM_Core_DAO::executeQuery("SELECT contact_id,
                 sum( total_amount ) as total_amount
                 FROM   civicrm_contribution cc
-                LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id ) 
+                LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id ) 
                 WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
             AND (YEAR(cc.receive_date) = YEAR(NOW())) and cc.contact_id IN ($contacts)
                 GROUP BY contact_id     "
@@ -635,7 +635,7 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
                                                    "SELECT contact_id,
                                                    sum( total_amount ) as total_amount
                                                    FROM   civicrm_contribution cc
-                                                   LEFT JOIN civicrm_contribution_type cType ON ( cType.id = cc.contribution_type_id )
+                                                   LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id )
                                                    WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
                                                    AND (YEAR(cc.receive_date) = YEAR(NOW())-1) and cc.contact_id IN ($contacts)
                                                    GROUP BY contact_id"
