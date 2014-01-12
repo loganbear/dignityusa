@@ -278,20 +278,24 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
             
         } 
     }  
-/*    elseif ($form->getVar('_id') == 31 ) {
+    elseif ($form->getVar('_id') == 31 ) {
         $chNum = $_GET["chNum"];
-        if ($chNum) {
+        if (isset($chNum)) {
+//        CRM_Core_Error::debug('Chapter Number', $chNum);
+//        exit;
             $params = array('version' => 3,
                             'sequential' => 1,
                             'id' => $chNum,
-                            'option_id' => 74,
+                            'option_group_id' => 74,
                             );
             $result = civicrm_api('OptionValue', 'getsingle', $params);
             if ($result['is_error'] == 0) {
-                $form['custom_33']->setValue($result['value']);
+                $defaults['custom_5'] = $result['value'];
+                $form->setDefaults($defaults);
+                $form->freeze('custom_5');
             }
         }
-    }  */
+    }
 }
 
 /**
