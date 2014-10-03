@@ -52,28 +52,30 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
 {
     if ( $objectName == 'LineItem' && $op == 'create' ) {
          if ( $params["financial_type_id"] == 2 && ( $params['unit_price'] == 50 || $params['unit_price'] == 100 )) {
+//            CRM_Core_Error::debug('Object Params',$params);
+//            exit;
             // Look for Contribution
             $apiParams = array('version'    => 3,
                                'sequential' => 1,
-                               'id'         => $id,   // $contribId,
+                               'id'         => $params['contribution_id'],   // $contribId,
                             );
             $contribInfo = civicrm_api('Contribution', 'getsingle', $apiParams);
-            if ( $contribInfo["is_error"] != 0 ) {
+            if ( isset($contribInfo["is_error"]) ) {
                 CRM_Core_Error::debug('Contribution Get Single', $apiParams);
-//                CRM_Core_Error::debug('Contribution', $contribInfo);
+                CRM_Core_Error::debug('Contribution', $contribInfo);
                 exit;
             }
-            
+/*            
             // Contribution may be in honor of/memory of.  If so, look for honoree's chapter
             if (is_null($contribInfo["honor_contact_id"]) ) {
                 $cId = $contribInfo["contact_id"];
             } else {
                 $cId = $contribInfo["honor_contact_id"];
             }
-            
+*/            
             // Get Contact Record
             $apiParams = array('version'    => 3,
-                               'contact_id' => $cId,
+                               'contact_id' => $contribInfo['contact_id'],
                                'return'     => 'custom_1',
                                'sequential' => 1,
                             );
@@ -120,23 +122,26 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                     $params['line_total'] = $params['unit_price'] - $amtChg;
                     $params['unit_price'] = $params['line_total'];
                     $params['qty'] = 1;
-                    $newParams = array('line_total'             => $amtChg,
-                                       'unit_price'             => $amtChg,
-                                       'price_field_value_id'   => 243,     // value for Chapter Member (civicrm_price_field_value_id)
+                    $newParams = array(
+                                       'entity_table'           => 'civicrm_contribution',
+                                       'entity_id'              => $params['entity_id'],
+                                       'contribution_id'        => $params['contribution_id'],
                                        'price_field_id'         => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
                                        'label'                  => $chapterName,
-                                       'financial_type_id'      => 8,
-                                       'field_title'            => 'Chapter Membership',
-                                       'description'            => $chapterName,
                                        'qty'                    => 1,
+                                       'unit_price'             => $amtChg,
+                                       'line_total'             => $amtChg,
                                        'participant_count'      => 0,
+                                       'price_field_value_id'   => 243,     // value for Chapter Member (civicrm_price_field_value_id)
+                                       'financial_type_id'      => 8,
+/*                                       'field_title'            => 'Chapter Membership',
+                                       'description'            => $chapterName,
                                        'max_value'              => '',
                                        'membership_type_id'     => $params['membership_type_id'],
                                        'membership_num_terms'   => $params['membership_num_terms'],
                                        'auto_renew'             => $params['auto_renew'],
                                        'html_type'              => 'Radio',
-                                       'entity_table'           => 'civicrm_contribution',
-                                       'entity_id'              => $id,
+*/
                                        'version'                => 3,
                                        'sequential'             => 1,
                                       );
@@ -148,11 +153,11 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                     }
                     $apiParams = array('version'            => 3,
                                        'sequential'         => 1,
-                                       'entity_id'          => $id,
-                                       'financial_type_id'  => 8,
+                                       'entity_id'          => $params['entity_id'],
+                                       'financial_type_id'  => 8,       // Chapter Member Dues
                                     );
                     $newLI = civicrm_api('LineItem', 'getsingle', $apiParams);
-                    if ( $newLI['is_error'] != 0 ) {
+                    if ( isset($newLI['is_error']) ) {
                         CRM_Core_Error::debug('New Line Get', $apiParams);
                         exit;                 
                     }
@@ -160,7 +165,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                     $newLineItem = new CRM_Price_BAO_LineItem();
                     $newLineItem->copyValues($newLI);
                 
-                    $contribId = array('id' => $id,
+                    $contribId = array('id' => $params['contribution_id'],
                                        );
                     $contribution = CRM_Contribute_BAO_Contribution::getValues($contribId, $values, $ids);
                     if ( is_null($contribution)) {
@@ -249,11 +254,15 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
        if ( $formName == 'CRM_Contribute_Form_Contribution_Main')  {
 //            CRM_Core_Error::debug('Form', $form);
 //            exit;
+            // Assumes templates are in a templates folder relative to this file
+            $templatePath = realpath(dirname(__FILE__)."/templates");
+            // Add fields
             $form->add('group','spouseInfo',ts('Spouse Information'));
             $form->add('text', 'spouseFirstName', ts('Spouse First Name'));
             $form->add('text', 'spouseLastName', ts('Spouse Last Name'));
             $form->add('text', 'spouseEmail', ts('Spouse Email'));
-            $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');  
+            $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');
+            CRM_Core_Region::instance('page-body')->add(array('template' => "{$templatePath}/spouseInfo.tpl"));
         }
         elseif
         (( $formName == 'CRM_Contribute_Form_Contribution_Confirm') ||
