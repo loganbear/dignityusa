@@ -506,8 +506,8 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <thead  style="text-align: left; border-bottom: 1px solid #999; background-color: #ffcc33;"><tr>
             <th>Date</th>
             <th>Type</th>
-            <th>Amount</th>
             <th>Paid By</th>
+            <th>Amount</th>
           </tr></thead>
           <tbody style="padding: 4px; border-bottom: 1px solid #999 background-color: #e8e9ed;">';
 
@@ -518,9 +518,9 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <tr>
             <td style="padding-left: 4px;">' . date('m/d/Y', strtotime($dao->receive_date)) . '</td>
             <td>' . $dao->contrib_type . '</td>
-            <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
                         . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
+            <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
           </tr>';
                 $values[$cid]['donor.current_donation'] .= $row;
                 /*           if (in_array($cid, $cids)) {
@@ -556,8 +556,8 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <thead  style="text-align: left; border-bottom: 1px solid #999; background-color: #ffcc33;"><tr>
             <th>Date</th>
             <th>Type</th>
-            <th>Amount</th>
             <th>Paid By</th>
+            <th>Amount</th>
           </tr></thead>
           <tbody style="padding: 4px; border-bottom: 1px solid #999 background-color: #e8e9ed;">';
 
@@ -568,9 +568,9 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <tr>
             <td style="padding-left: 4px;">' . date('m/d/Y', strtotime($dao->receive_date)) . '</td>
             <td>' . $dao->contrib_type . '</td>
-            <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
                         . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
+            <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
           </tr>';
                 $values[$cid]['donor.prior_donation'] .= $row;
                 /*           if (in_array($cid, $cids)) {
