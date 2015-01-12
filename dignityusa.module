@@ -179,33 +179,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
             }
         }
     }
-/*    elseif ( $objectName == 'Contribution' && ( $op == 'create' || $op == 'edit')) {
-        if ( $params['financial_type_id'] == 2 ||
-             $params['financial_type_id'] == 7 ||
-             $params['financial_type_id'] == 8 ) {
-        CRM_Core_Error::debug('Contribution', $params);
-        CRM_Core_Error::debug('id', $id);
-        exit;
-            // Get Contact Record
-            $apiParams = array('version'    => 3,
-                               'contact_id' => $params['contact_id'],
-                               'return'     => 'custom_1',
-                               'sequential' => 1,
-                            );
-            $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
-            if ( isset($contactInfo["is_error"]) ) {
-                CRM_Core_Error::debug('Contact Get Params', $apiParams);
-                CRM_Core_Error::debug('Contact Get Result', $contactInfo);
-                exit;
-            }
-            $chapterName = $contactInfo["custom_1"]["0"];
-            require_once 'CRM/Core/BAO/CustomValueTable.php';
-            $set_params = array('entityID' => $id,
-                                $custom_field['chapter_name'] => $chapterName);
-            CRM_Core_BAO_CustomValueTable::setValues($set_params);
-        }
-    }
-*/
+
 }
 
 function dignityusa_civicrm_post($op, $objectName, $id, &$params) {
@@ -532,7 +506,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <thead  style="text-align: left; border-bottom: 1px solid #999; background-color: #ffcc33;"><tr>
             <th>Date</th>
             <th>Type</th>
-            <th>Source</th>
             <th>Amount</th>
             <th>Paid By</th>
             <th>Notes</th>
@@ -546,7 +519,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <tr>
             <td style="padding-left: 4px;">' . date('m/d/Y', strtotime($dao->receive_date)) . '</td>
             <td>' . $dao->contrib_type . '</td>
-            <td>' . $dao->source . ' </td> 
             <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
                         . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
@@ -586,7 +558,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <thead  style="text-align: left; border-bottom: 1px solid #999; background-color: #ffcc33;"><tr>
             <th>Date</th>
             <th>Type</th>
-            <th>Source</th>
             <th>Amount</th>
             <th>Paid By</th>
             <th>Notes</th>
@@ -600,7 +571,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
           <tr>
             <td style="padding-left: 4px;">' . date('m/d/Y', strtotime($dao->receive_date)) . '</td>
             <td>' . $dao->contrib_type . '</td>
-            <td>' . $dao->source . ' </td> 
             <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
                         . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
