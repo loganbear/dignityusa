@@ -508,7 +508,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
             <th>Type</th>
             <th>Amount</th>
             <th>Paid By</th>
-            <th>Notes</th>
           </tr></thead>
           <tbody style="padding: 4px; border-bottom: 1px solid #999 background-color: #e8e9ed;">';
 
@@ -522,7 +521,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
             <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
                         . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
-            <td>' . ($dao->honoree ? "<br />{$dao->honor_type} {$dao->honoree}" : '') . '</td>
           </tr>';
                 $values[$cid]['donor.current_donation'] .= $row;
                 /*           if (in_array($cid, $cids)) {
@@ -560,7 +558,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
             <th>Type</th>
             <th>Amount</th>
             <th>Paid By</th>
-            <th>Notes</th>
           </tr></thead>
           <tbody style="padding: 4px; border-bottom: 1px solid #999 background-color: #e8e9ed;">';
 
@@ -574,7 +571,6 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
             <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
                         . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
-            <td>' . ($dao->honoree ? "<br />{$dao->honor_type} {$dao->honoree}" : '') . '</td>
           </tr>';
                 $values[$cid]['donor.prior_donation'] .= $row;
                 /*           if (in_array($cid, $cids)) {
