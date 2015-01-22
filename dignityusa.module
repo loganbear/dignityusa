@@ -475,6 +475,10 @@ function dignityusa_civicrm_tokens(&$tokens) {
         'donor.prior_donation' => 'Donations: Prior Yr Detail',
         'donor.total_current' => 'Donations: Curr Yr Total',
         'donor.total_prior' => 'Donations: Prior Yr Total',
+        'donor.today' => 'Todays date',
+	'donor.lastcontribution_amount' => 'Amount of last contribution',
+	'donor.lastcontribution_date' => 'Date of last contribution',
+	'donor.lastcontribution_financial_type' => 'Financial type of last contribution',
     );
 }
 
@@ -485,6 +489,22 @@ function dignityusa_civicrm_tokens(&$tokens) {
 function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
     // Check to see if any of the donor tokens are needed
     if (!empty($tokens['donor'])) {
+        //token maf_tokens.today
+	if (in_array('today', $tokens['donor']) || array_key_exists('today', $tokens['donor'])) {
+	    dignityusa_today($values, $cids, $job, $tokens,$context);
+	}
+        // - donor.lastcontribution_amount
+        // - donor.lastcontribution_date
+        // - donor.lastcontribution_financial_type
+        if (in_array('lastcontribution_amount', $tokens['donor']) ||
+            in_array('lastcontribution_date', $tokens['donor']) ||
+            in_array('lastcontribution_financial_type', $tokens['donor']) || 
+            array_key_exists('lastcontribution_amount', $tokens['donor']) ||
+            array_key_exists('lastcontribution_date', $tokens['donor']) ||
+            array_key_exists('lastcontribution_financial_type', $tokens['donor'])) {
+                dignityusa_lastcontribution($values, $cids, $job, $tokens, $context);
+        }
+
         // Next check the current donation defail
         if (in_array('current_donation', $tokens['donor'])) {
             $contacts = implode(',', $cids);
@@ -626,5 +646,71 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
                     $values[$cid]['donor.total_prior'] = $dao->total_amount;
             }
         }
+    }
+}
+
+/*
+ * Returns the value of token donor.today
+ */
+
+function dignityusa_today(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+    if (!empty($tokens['donor'])) {
+	if (in_array('today', $tokens['donor']) || array_key_exists('today', $tokens['donor'])) {
+	    $today = new DateTime();
+	    foreach ($cids as $cid) {
+		$values[$cid]['donor.today'] = dignityusa_date_format($today);
+	    }
+	}
+  }
+}
+
+/*
+ * Formats date to Monthname Day, Year
+ */
+function dignityusa_date_format($date) {
+    $str = $date->format('F') . ' ' . $date->format('j') . ', ' . $date->format('Y');
+    return $str;
+}
+
+/*
+ * Returns the value of tokens:
+ * - donor.lastcontribution_amount
+ * - donor.lastcontribution_date
+ * - donor.lastcontribution_financial_type
+ */
+function dignityusa_lastcontribution(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+    $contacts = implode(',', $cids);
+    if (!empty($tokens['donor'])) {		
+	if ((in_array('lastcontribution_amount', $tokens['donor'])) ||
+            (in_array('lastcontribution_date', $tokens['donor'])) ||
+            (in_array('lastcontribution_financial_type', $tokens['donor']))) {
+	    $dao = &CRM_Core_DAO::executeQuery("
+			SELECT cc.*, ft.name as financial_type
+			FROM civicrm_contribution as cc LEFT JOIN civicrm_financial_type ft ON cc.financial_type_id = ft.id
+			WHERE cc.is_test = 0 AND 
+			receive_date = (SELECT max(receive_date) FROM civicrm_contribution c2 WHERE c2.contact_id = cc.contact_id AND c2.contribution_status_id = 1)
+			AND cc.contact_id IN ($contacts)
+	    ");
+			
+	    while ($dao->fetch()) {
+		$cid = $dao->contact_id;
+		if (in_array($cid, $cids)) {
+		    if (in_array('lastcontribution_amount', $tokens['donor']) ||
+                        array_key_exists('lastcontribution_amount', $tokens['donor'])) {
+			    $amount = (float) $dao->total_amount;
+			    $values[$cid]['donor.lastcontribution_amount'] = '$' . number_format($amount, 2, '.', ',');
+		    }
+		    if (in_array('lastcontribution_date', $tokens['donor']) ||
+                        array_key_exists('lastcontribution_date', $tokens['donor'])) {
+			    $date = new DateTime($dao->receive_date);
+                            $values[$cid]['donor.lastcontribution_date'] = dignityusa_date_format($date);
+		    }
+		    if (in_array('lastcontribution_financial_type', $tokens['donor']) ||
+                        array_key_exists('lastcontribution_financial_type', $tokens['donor'])) {
+			    $values[$cid]['donor.lastcontribution_financial_type'] = $dao->financial_type;
+		    }
+		}
+	    }
+	}
     }
 }
