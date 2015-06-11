@@ -55,96 +55,74 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
 //            CRM_Core_Error::debug('Object Params',$params);
 //            exit;
             // Look for Contribution
-            $apiParams = array('version'    => 3,
-                               'sequential' => 1,
-                               'id'         => $params['contribution_id'],   // $contribId,
-                            );
-            $contribInfo = civicrm_api('Contribution', 'getsingle', $apiParams);
-            if ( isset($contribInfo["is_error"]) ) {
-                CRM_Core_Error::debug('Contribution Get Single', $apiParams);
-                CRM_Core_Error::debug('Contribution', $contribInfo);
-                exit;
+            try{
+            $contribInfo = civicrm_api3('Contribution', 'getsingle', array(
+                'sequential' => 1,
+                'id' => $params['contribution_id']
+                )
+            );
             }
-/*            
-            // Contribution may be in honor of/memory of.  If so, look for honoree's chapter
-            if (is_null($contribInfo["honor_contact_id"]) ) {
-                $cId = $contribInfo["contact_id"];
-            } else {
-                $cId = $contribInfo["honor_contact_id"];
+            catch (CiviCRM_API3_Exception $e) {
+                $error = $e->getMessage();
             }
-*/            
-            // Get Contact Record
-            $apiParams = array('version'    => 3,
-                               'contact_id' => $contribInfo['contact_id'],
-                               'return'     => 'custom_1',
-                               'sequential' => 1,
-                            );
-            $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
-            if ( isset($contactInfo["is_error"]) ) {
-                CRM_Core_Error::debug('Contact Get Params', $apiParams);
-                CRM_Core_Error::debug('Contact Get Result', $contactInfo);
-                exit;
-            }
-            $chapterName = $contactInfo["custom_1"]["0"];
+            // Look for the Donor
+            $contactInfo = civicrm_api3('Contact', 'getsingle', array (
+                'sequential' => 1,
+                'id' => $contribInfo['contact_id'],
+                'return' => 'custom_1',
+                )
+            );
+            $chapterName = $contactInfo['custom_1']['0'];
             
             // Get Chapter Record
-            $apiParams = array('version'            => 3,
-                               'return'             => 'custom_39', // Field Id = 39
-                               'contact_sub_type'   => 'Chapter',
-                               'organization_name'  => $chapterName,
-                               'sequential'         => 1,
-                            );
-            $chapterInfo = civicrm_api('Contact', 'get', $apiParams);
-            if ( $chapterInfo["is_error"] != 0 ) {
-                CRM_Core_Error::debug('Contact Get Value', $apiParams);
-                CRM_Core_Error::debug('Contact Get Results', $chapterInfo);
-                exit;
+            try{
+                $chapterInfo = civicrm_api3('Contact', 'getsingle', array(
+                    'sequential' => 1,
+                    'return' => "custom_39",
+                    'organization_name' => $chapterName,
+                )
+            );
             }
-  
-            if ( $chapterInfo['count'] != 0 ) {
-                $chapterShare = $chapterInfo["values"]["0"]["custom_39"];
-                // Find line item record for membership
+            catch  (CiviCRM_API3_Exception $e) {
+                $error = $e->getMessage();
+            }
+            
+
+            $chapterShare = $chapterInfo["custom_39"];
+            // Find line item record for membership
                         
-                // Remove Chapter share of membership
-                if ($params['unit_price'] == 50 ) {  // Single
-                    $amtChg = $chapterShare;
-                    $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
-                    $params['price_field_value_id'] = 241;   // value for Single (civicrm_price_field_value_id)
-                } elseif ($params['unit_price'] == 100 ) {  // Couple
-                    $amtChg = $chapterShare * 2;
-                    $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
-                    $params['price_field_value_id'] = 242;   // value for Couple (civicrm_price_field_value_id)
-                } else {
-                    $amtChg = 0;
-                }
+            // Remove Chapter share of membership
+            if ($params['unit_price'] == 50 ) {  // Single
+                $amtChg = $chapterShare;
+                $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
+                $params['price_field_value_id'] = 241;   // value for Single (civicrm_price_field_value_id)
+            } elseif ($params['unit_price'] == 100 ) {  // Couple
+                $amtChg = $chapterShare * 2;
+                $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
+                $params['price_field_value_id'] = 242;   // value for Couple (civicrm_price_field_value_id)
+            } else {
+                $amtChg = 0;
+            }
                 
-                if ( $amtChg != 0 ) {
-                    $params['line_total'] = $params['unit_price'] - $amtChg;
-                    $params['unit_price'] = $params['line_total'];
-                    $params['qty'] = 1;
-                    $newParams = array(
-                                       'entity_table'           => 'civicrm_contribution',
-                                       'entity_id'              => $params['entity_id'],
-                                       'contribution_id'        => $params['contribution_id'],
-                                       'price_field_id'         => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
-                                       'label'                  => $chapterName,
-                                       'qty'                    => 1,
-                                       'unit_price'             => $amtChg,
-                                       'line_total'             => $amtChg,
-                                       'participant_count'      => 0,
-                                       'price_field_value_id'   => 243,     // value for Chapter Member (civicrm_price_field_value_id)
-                                       'financial_type_id'      => 8,
-/*                                       'field_title'            => 'Chapter Membership',
-                                       'description'            => $chapterName,
-                                       'max_value'              => '',
-                                       'membership_type_id'     => $params['membership_type_id'],
-                                       'membership_num_terms'   => $params['membership_num_terms'],
-                                       'auto_renew'             => $params['auto_renew'],
-                                       'html_type'              => 'Radio',
-*/
-                                       'version'                => 3,
-                                       'sequential'             => 1,
-                                      );
+            if ( $amtChg != 0 ) {
+                $params['line_total'] = $params['unit_price'] - $amtChg;
+                $params['unit_price'] = $params['line_total'];
+                $params['qty'] = 1;
+                $newParams = array(
+                                   'entity_table'           => 'civicrm_contribution',
+                                   'entity_id'              => $params['entity_id'],
+                                   'contribution_id'        => $params['contribution_id'],
+                                   'price_field_id'         => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
+                                   'label'                  => $chapterName,
+                                   'qty'                    => 1,
+                                   'unit_price'             => $amtChg,
+                                   'line_total'             => $amtChg,
+                                   'participant_count'      => 0,
+                                   'price_field_value_id'   => 243,     // value for Chapter Member (civicrm_price_field_value_id)
+                                   'financial_type_id'      => 8,
+                                   'version'                => 3,
+                                   'sequential'             => 1,
+                                   );
                     $result = civicrm_api('LineItem', 'create', $newParams);
                     if ( $result['is_error'] != 0 ) {
                         CRM_Core_Error::debug('New Line Item Create', $newParams);
@@ -180,7 +158,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
         }
     }
 
-}
+
 
 function dignityusa_civicrm_post($op, $objectName, $id, &$params) {
     if ( $objectName == 'Contribution' && ( $op == 'create' || $op == 'edit')) {
