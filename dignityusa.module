@@ -50,144 +50,198 @@ $custom_field = array('chapter_name' => 'custom_5');
 
 function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
 {
-    if ( $objectName == 'LineItem' && $op == 'create' ) {
-         if ( $params["financial_type_id"] == 2 && ( $params['unit_price'] == 50 || $params['unit_price'] == 100 )) {
+    if ($objectName == 'LineItem' && $op == 'create') {
+        if ($params["financial_type_id"] == 2 && ($params['unit_price'] == 50 || $params['unit_price'] == 100)) {
 //            CRM_Core_Error::debug('Object Params',$params);
 //            exit;
             // Look for Contribution
-            try{
-            $contribInfo = civicrm_api3('Contribution', 'getsingle', array(
-                'sequential' => 1,
-                'id' => $params['contribution_id']
-                )
-            );
-            }
-            catch (CiviCRM_API3_Exception $e) {
+            try {
+                $contribInfo = civicrm_api3(
+                    'Contribution', "getsingle", array(
+                                      'sequential' => 1,
+                                      'id' => $params['contribution_id']
+                                  )
+                );
+            } catch (CiviCRM_API3_Exception $e) {
                 $error = $e->getMessage();
             }
             // Look for the Donor
-            $contactInfo = civicrm_api3('Contact', 'getsingle', array (
-                'sequential' => 1,
-                'id' => $contribInfo['contact_id'],
-                'return' => 'custom_1',
-                )
+            $contactInfo = civicrm_api3(
+                'Contact', 'getsingle', array(
+                             'sequential' => 1,
+                             'id' => $contribInfo['contact_id'],
+                             'return' => 'custom_1',
+                         )
             );
             $chapterName = $contactInfo['custom_1']['0'];
-            
+
             // Get Chapter Record
-            try{
-                $chapterInfo = civicrm_api3('Contact', 'getsingle', array(
-                    'sequential' => 1,
-                    'return' => "custom_39",
-                    'organization_name' => $chapterName,
-                )
-            );
-            }
-            catch  (CiviCRM_API3_Exception $e) {
+            try {
+                $chapterInfo = civicrm_api3(
+                    "Contact", 'getsingle', array(
+                                 'sequential' => 1,
+                                 'return' => "custom_39",
+                                 'organization_name' => $chapterName,
+                                 'contact_type' => 'Organization',
+                             )
+                );
+            } catch (CiviCRM_API3_Exception $e) {
                 $error = $e->getMessage();
             }
-            
+
 
             $chapterShare = $chapterInfo["custom_39"];
-            // Find line item record for membership
-                        
+
             // Remove Chapter share of membership
-            if ($params['unit_price'] == 50 ) {  // Single
+            if ($params['unit_price'] == 50) {  // Single
                 $amtChg = $chapterShare;
                 $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
                 $params['price_field_value_id'] = 241;   // value for Single (civicrm_price_field_value_id)
-            } elseif ($params['unit_price'] == 100 ) {  // Couple
+            } elseif ($params['unit_price'] == 100) {  // Couple
                 $amtChg = $chapterShare * 2;
                 $params['price_field_id'] = 100;         // price_field for DignityUSA membership (civicrm_price_field_id)
                 $params['price_field_value_id'] = 242;   // value for Couple (civicrm_price_field_value_id)
             } else {
                 $amtChg = 0;
             }
-                
-            if ( $amtChg != 0 ) {
+
+            if ($amtChg != 0) {
                 $params['line_total'] = $params['unit_price'] - $amtChg;
                 $params['unit_price'] = $params['line_total'];
                 $params['qty'] = 1;
                 $newParams = array(
-                                   'entity_table'           => 'civicrm_contribution',
-                                   'entity_id'              => $params['entity_id'],
-                                   'contribution_id'        => $params['contribution_id'],
-                                   'price_field_id'         => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
-                                   'label'                  => $chapterName,
-                                   'qty'                    => 1,
-                                   'unit_price'             => $amtChg,
-                                   'line_total'             => $amtChg,
-                                   'participant_count'      => 0,
-                                   'price_field_value_id'   => 243,     // value for Chapter Member (civicrm_price_field_value_id)
-                                   'financial_type_id'      => 8,
-                                   'version'                => 3,
-                                   'sequential'             => 1,
-                                   );
-                    $result = civicrm_api('LineItem', 'create', $newParams);
-                    if ( $result['is_error'] != 0 ) {
-                        CRM_Core_Error::debug('New Line Item Create', $newParams);
-                        CRM_Core_Error::debug('Result', $result);
-                        exit;
-                    }
-                    $apiParams = array('version'            => 3,
-                                       'sequential'         => 1,
-                                       'entity_id'          => $params['entity_id'],
-                                       'financial_type_id'  => 8,       // Chapter Member Dues
-                                    );
-                    $newLI = civicrm_api('LineItem', 'getsingle', $apiParams);
-                    if ( isset($newLI['is_error']) ) {
-                        CRM_Core_Error::debug('New Line Get', $apiParams);
-                        exit;                 
-                    }
-                    
-                    $newLineItem = new CRM_Price_BAO_LineItem();
-                    $newLineItem->copyValues($newLI);
+                    'entity_table' => 'civicrm_contribution',
+                    'entity_id' => $params['entity_id'],
+                    'contribution_id' => $params['contribution_id'],
+                    'price_field_id' => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
+                    'label' => $chapterName,
+                    'qty' => 1,
+                    'unit_price' => $amtChg,
+                    'line_total' => $amtChg,
+                    'participant_count' => 0,
+                    'price_field_value_id' => 243,     // value for Chapter Member (civicrm_price_field_value_id)
+                    'financial_type_id' => 8,
+                    'sequential' => 1,
+                );
+                $result = civicrm_api3('LineItem', 'create', $newParams);
+  //              CRM_Core_Error::debug_var('Line Item Result', $result, TRUE, TRUE);
+                if ($result['is_error'] != 0) {
+                    //                       CRM_Core_Error::debug('New Line Item Create', $newParams);
+                    //                       CRM_Core_Error::debug('Result', $result);
+                    exit;
+                }
                 
-                    $contribId = array('id' => $params['contribution_id'],
-                                       );
-                    $contribution = CRM_Contribute_BAO_Contribution::getValues($contribId, $values, $ids);
-                    if ( is_null($contribution)) {
-                        CRM_Core_Error::debug('New Contribution', $contribId);
-                        CRM_Core_Error::debug('Values', $values);
-                        CRM_Core_Error::debug('Ids', $ids);
-                        exit;
-                    }
-                   CRM_Financial_BAO_FinancialItem::add($newLineItem, $contribution);
+                // Create new Financial Item for new Line Item
+                if (isset($result['values']['0']['id'])) {
+                    $newID = $result['values']['0']['id'];
+
+                    $result = civicrm_api3(
+                        'FinancialItem', 'create', array(
+                            'sequential' => 1,
+                            'transaction_date' => date("Y-m-d H:i:s"),
+                            'contact_id' => $contribInfo['contact_id'],
+                            'description' => $chapterName,
+                            'financial_account_id' => "Chapter Member Dues",
+                            'status_id' => "Paid",
+                            'entity_table' => "civicrm_line_item",
+                            'entity_id' => $newID,
+                            'currency' => 'USD',
+                            'amount' => $amtChg,
+                        )
+                    );
                 }
             }
         }
     }
+}
 
 
+function dignityusa_civicrm_post($op, $objectName, $id, &$params)
+{
 
-function dignityusa_civicrm_post($op, $objectName, $id, &$params) {
-    if ( $objectName == 'Contribution' && ( $op == 'create' || $op == 'edit')) {
-        $apiParams = array('version' => 3,
-                           'sequential' => 1,
-                           'id' => $id,
-                           );
+    if ($objectName == 'Contribution' && ($op == 'create' || $op == 'edit')) {
+        $apiParams = array(
+            'version' => 3,
+            'sequential' => 1,
+            'id' => $id,
+        );
         $Contrib = civicrm_api('Contribution', 'getsingle', $apiParams);
 
-        if ($Contrib['financial_type_id'] == 7 || $Contrib['financial_type_id'] == 2 ) {
-            $apiParams = array('version' => 3,
-                               'sequential' => 1,
-                               'contact_id' => $Contrib['contact_id'],
-                               'return' => 'custom_1',
-                               );
+        if ($Contrib['financial_type_id'] == 7 || $Contrib['financial_type_id'] == 2) {
+            $apiParams = array(
+                'version' => 3,
+                'sequential' => 1,
+                'contact_id' => $Contrib['contact_id'],
+                'return' => 'custom_1',
+            );
             $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
             $chapterName = $contactInfo["custom_1"]["0"];
 //            CRM_Core_Error::debug('Chapter Name', $chapterName);
 //            CRM_Core_Error::debug('Contact Info', $contactInfo);
 //            CRM_Core_Error::debug('Contribution', $Contrib);
 //            exit;
-            $apiParams = array('version' => 3,
-                               'sequential' => 1,
-                               'entity_id' => $id,
-                               'custom_5' => $chapterName,
-                              );
-            $results=civicrm_api("CustomValue", "create", $apiParams);
-            
+            $apiParams = array(
+                'version' => 3,
+                'sequential' => 1,
+                'entity_id' => $id,
+                'custom_5' => $chapterName,
+            );
+            $results = civicrm_api("CustomValue", "create", $apiParams);
+
         }
+    } elseif ($objectName == 'FinancialItem') {
+        // Check for Member Dues Financial Item record to create a possible Chapter
+        // Member Dues Entity Financial Trxn record
+        // First, get the newly created Financial Item record
+        $finItem = civicrm_api3('FinancialItem', 'getsingle', array(
+            'sequential' => 1,
+            'id' => $id,
+            )
+                               );
+        // Now make sure that it's a Member Dues record
+        if ($finItem['financial_account_id'] == 2) {
+            // Get the Line Item record
+            $lineItem = civicrm_api3('LineItem', 'getsingle', array(
+                'sequential' => 1,
+                'id' => $finItem['entity_id'],
+                )
+            );
+            // Get the entity table record for the transaction id
+            $entityRec = civicrm_api3('EntityFinancialTrxn', 'getsingle', array(
+                'sequential' => 1,
+                'entity_id' => $id,
+                'entity_table' => "civicrm_financial_item",
+                )
+            );
+            
+            // check for Chapter Member Dues line item
+            $chapterLineItem = civicrm_api3('LineItem', 'getsingle', array(
+                'sequential' => 1,
+                'contribution_id' => $lineItem['contribution_id'],
+                'financial_type_id' => "Chapter Member Dues",
+                )
+            );
+            
+            if ($chapterLineItem['is_error'] == 0) {
+                // Okay - we have the chapter member dues line item
+                // Now use its id to find the financial item record
+                $chapterFinItem = civicrm_api3('FinancialItem', 'getsingle' ,array(
+                    'sequential' => 1,
+                    'entity_id' => $chapterLineItem['id'],
+                    'entity_table' => 'civicrm_line_item',
+                    )
+                );
+                
+                $result = civicrm_api3('EntityFinancialTrxn', 'create', array(
+                    'sequential' => 1,
+                    'entity_table' => "civicrm_financial_item",
+                    'entity_id' => $chapterFinItem['id'],
+                    'financial_trxn_id' => $entityRec['financial_trxn_id'],
+                    'amount' => $chapterFinItem['amount'],
+                    )
+                );
+            }
+        }        
     }
 }
 
@@ -201,24 +255,25 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params) {
  */
 
 
-function dignityusa_civicrm_buildForm( $formName, &$form ) {
+function dignityusa_civicrm_buildForm($formName, &$form)
+{
     if ($form->getVar('_id') == 3) {
-       if ( $formName == 'CRM_Contribute_Form_Contribution_Main')  {
+        if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
 //            CRM_Core_Error::debug('Form', $form);
 //            exit;
             // Assumes templates are in a templates folder relative to this file
-            $templatePath = realpath(dirname(__FILE__)."/templates");
+            $templatePath = realpath(dirname(__FILE__) . "/templates");
             // Add fields
-            $form->add('group','spouseInfo',ts('Spouse Information'));
+            $form->add('group', 'spouseInfo', ts('Spouse Information'));
             $form->add('text', 'spouseFirstName', ts('Spouse First Name'));
             $form->add('text', 'spouseLastName', ts('Spouse Last Name'));
             $form->add('text', 'spouseEmail', ts('Spouse Email'));
             $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');
             CRM_Core_Region::instance('page-body')->add(array('template' => "{$templatePath}/spouseInfo.tpl"));
-        }
-        elseif
-        (( $formName == 'CRM_Contribute_Form_Contribution_Confirm') ||
-         ( $formName == 'CRM_Contribute_Form_Contribution_ThankYou') ) {
+        } elseif
+        (($formName == 'CRM_Contribute_Form_Contribution_Confirm') ||
+            ($formName == 'CRM_Contribute_Form_Contribution_ThankYou')
+        ) {
             $defaults = array();
             $sFirst = $form->_params["spouseFirstName"];
             $sLast = $form->_params["spouseLastName"];
@@ -226,29 +281,29 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
             $form->_values["spouseFirstName"] = $sFirst;
             $form->_values["spouseLastName"] = $sLast;
             $form->_values["spouseEmail"] = $sEmail;
-            $form->add('group','spouseInfo',ts('Spouse Information'));
+            $form->add('group', 'spouseInfo', ts('Spouse Information'));
             $form->add('text', 'spouseFirstName', ts('Spouse First Name'), $sFirst);
             $form->add('text', 'spouseLastName', ts('Spouse Last Name'), $sLast);
             $form->add('text', 'spouseEmail', ts('Spouse Email'), $sEmail);
-            $defaults['spouseFirstName'] =  $sFirst;
-            $defaults['spouseLastName'] =  $sLast;
-            $defaults['spouseEmail'] =  $sEmail;
+            $defaults['spouseFirstName'] = $sFirst;
+            $defaults['spouseLastName'] = $sLast;
+            $defaults['spouseEmail'] = $sEmail;
             $form->setDefaults($defaults);
 //            CRM_Core_Error::debug('Form', $form);
 //            exit;
-            
-        } 
-    }  
-    elseif ($form->getVar('_id') == 31 ) {
+
+        }
+    } elseif ($form->getVar('_id') == 31) {
         $chNum = $_GET["chNum"];
         if (isset($chNum)) {
 //        CRM_Core_Error::debug('Chapter Number', $chNum);
 //        exit;
-            $params = array('version' => 3,
-                            'sequential' => 1,
-                            'id' => $chNum,
-                            'option_group_id' => 74,
-                            );
+            $params = array(
+                'version' => 3,
+                'sequential' => 1,
+                'id' => $chNum,
+                'option_group_id' => 74,
+            );
             $result = civicrm_api('OptionValue', 'getsingle', $params);
             if ($result['is_error'] == 0) {
                 $defaults['custom_5'] = $result['value'];
@@ -264,125 +319,125 @@ function dignityusa_civicrm_buildForm( $formName, &$form ) {
  *
  * This hook is invoked when a CiviCRM form is submitted. If the module has injected
  * any form elements, this hook should save the values in the database.
- * 
+ *
  * Parameters:
  * string $formName - the name of the form
  * object $form - reference to the form object
- * 
+ *
  * Returns:
  * null - the return value is ignored
  *
  */
-
-function dignityusa_civicrm_postProcess( $formName, &$form) {
-    if ( $formName == 'CRM_Contribute_Form_Contribution_Confirm') {
-        if ($form->getVar('_id') == 3 ) {
-//           CRM_Core_Error::debug('Form', $form);
-//           exit;
-            // Set up spousal relationship
-            $sFirst = $form->_params["spouseFirstName"];
-            if ( $sFirst ) {
-                $cId = $form->getVar('_contactID');
-                $sLast = $form->_params["spouseLastName"];
-                $sEmail = $form->_params["spouseEmail"];
-                // check for the spouse record
-                $params = array('version' => 3,
-                                'sequential' => 1,
-                                'first_name' => $sFirst,
-                                'last_name' => $sLast,
-                                'email' => $sEmail,
-                                );
-                $result = civicrm_api('Contact', 'get', $params);
-                if ( $result['count'] == 0) {
-                    // Cannot find - create and get Spouse ID
-                    $params = array('version' => 3,
-                                    'sequential' => 1,
-                                    'first_name' => $sFirst,
-                                    'last_name' => $sLast,
-                                    'email' => $sEmail,
-                                    'contact_type' => 'Individual',
-                                    );
-                    $result = civicrm_api('Contact', 'create', $params);
-                    $sID = $result['id'];
-                    $params = array('version' => 3,
-                                    'sequential' => 1,
-                                    'contact_id' => $sID,
-                                    'location_type_id' => 1,
-                                    'street_address' => $form->_params['street_address-Primary'],
-                                    'city' => $form->_params['city-Primary'],
-                                    'postal_code' => $form->_params['postal_code-Primary'],
-                                    'country_id' => $form->_params['country-Primary'],
-                                    'state_province_id' => $form->_params['state_province-Primary'],
-                                    'is_primary' => TRUE,
-                                    );
-                    $result = civicrm_api('Address', 'create', $params);
-        
-                } else {
-                    $sID = $result['id'] ;
-                }
-
-                // See if contact is contact a
-                $params = array('version' => 3,
-                                'sequential' => 1,
-                                'contact_id_a' => $cId,
-                                'contact_id_b' => $sID,
-                                'relationship_type_id' => 2,
-                                );
-                $result = civicrm_api('Relationship', 'get', $params);
-                if ( $result['count'] == 0) {
-                    // See if contact is contact b
-                    $params = array('version' => 3,
-                                    'sequential' => 1,
-                                    'contact_id_a' => $sID,
-                                    'contact_id_b' => $cId,
-                                    'relationship_type_id' => 2,
-                                    );
-                    $result = civicrm_api('Relationship', 'get', $params);
-                    if ( $result['count'] == 0) {
-                        $params = array('version' => 3,
-                                        'sequential' => 1,
-                                        'contact_id_a' => $cId,
-                                        'contact_id_b' => $sID,
-                                        'relationship_type_id' => 2,
-                                        );
-                        $result = civicrm_api('Relationship', 'create', $params);
-                        // TODO: Check for couple membership creation
-                        // Steps: Find membership for $cId
-                        $params = array('version' => 3,
-                                        'sequential' => 1,
-                                        'membership_contact_id' => $cId,
-                                        );
-                        $result = civicrm_api('Membership', 'getsingle', $params);
-                        if ( $result["membership_type_id"] == 2 ) {
-                            $params = array('version' => 3,
-                                            'sequential' => 1,
-                                            'membership_contact_id' => $sID,
-                                            'membership_type_id' => 2,
-                                            'membership_source' => $result['source'],
-                                            'status_id' => $result["status_id"],
-                                            'member_is_pay_later' => $result['is_pay_later'],
-                                            'owner_membership_id' => $result['id'],
-                                            'skipStatusCal' => 1,
-                                            );
-                            if ( isset($result['join_date'] )) {
-                                $params["join_date"] = $result["join_date"];
-                                $params["start_date"] = $result["start_date"];
-                                $params["end_date"] = $result["end_date"];
-                            } else {
-                                $params["join_date"] = NULL;
-                                $params["end_date"] = NULL;
-                                $params["start_date"] = NULL;
-                            }
-                            $res2 = civicrm_api('Membership', 'create', $params);
-                        }
-                        //        Create $sId membership with $cId's membership id as owner_membership_id
-                    }
-                }
-            }
-        }
-    }
-}
-
+/**
+ * function dignityusa_civicrm_postProcess( $formName, &$form) {
+ * if ( $formName == 'CRM_Contribute_Form_Contribution_Confirm') {
+ * if ($form->getVar('_id') == 3 ) {
+ * //           CRM_Core_Error::debug('Form', $form);
+ * //           exit;
+ * // Set up spousal relationship
+ * $sFirst = $form->_params["spouseFirstName"];
+ * if ( $sFirst ) {
+ * $cId = $form->getVar('_contactID');
+ * $sLast = $form->_params["spouseLastName"];
+ * $sEmail = $form->_params["spouseEmail"];
+ * // check for the spouse record
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'first_name' => $sFirst,
+ * 'last_name' => $sLast,
+ * 'email' => $sEmail,
+ * );
+ * $result = civicrm_api('Contact', 'get', $params);
+ * if ( $result['count'] == 0) {
+ * // Cannot find - create and get Spouse ID
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'first_name' => $sFirst,
+ * 'last_name' => $sLast,
+ * 'email' => $sEmail,
+ * 'contact_type' => 'Individual',
+ * );
+ * $result = civicrm_api('Contact', 'create', $params);
+ * $sID = $result['id'];
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'contact_id' => $sID,
+ * 'location_type_id' => 1,
+ * 'street_address' => $form->_params['street_address-Primary'],
+ * 'city' => $form->_params['city-Primary'],
+ * 'postal_code' => $form->_params['postal_code-Primary'],
+ * 'country_id' => $form->_params['country-Primary'],
+ * 'state_province_id' => $form->_params['state_province-Primary'],
+ * 'is_primary' => TRUE,
+ * );
+ * $result = civicrm_api('Address', 'create', $params);
+ *
+ * } else {
+ * $sID = $result['id'] ;
+ * }
+ *
+ * // See if contact is contact a
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'contact_id_a' => $cId,
+ * 'contact_id_b' => $sID,
+ * 'relationship_type_id' => 2,
+ * );
+ * $result = civicrm_api('Relationship', 'get', $params);
+ * if ( $result['count'] == 0) {
+ * // See if contact is contact b
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'contact_id_a' => $sID,
+ * 'contact_id_b' => $cId,
+ * 'relationship_type_id' => 2,
+ * );
+ * $result = civicrm_api('Relationship', 'get', $params);
+ * if ( $result['count'] == 0) {
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'contact_id_a' => $cId,
+ * 'contact_id_b' => $sID,
+ * 'relationship_type_id' => 2,
+ * );
+ * $result = civicrm_api('Relationship', 'create', $params);
+ * // TODO: Check for couple membership creation
+ * // Steps: Find membership for $cId
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'membership_contact_id' => $cId,
+ * );
+ * $result = civicrm_api('Membership', 'getsingle', $params);
+ * if ( $result["membership_type_id"] == 2 ) {
+ * $params = array('version' => 3,
+ * 'sequential' => 1,
+ * 'membership_contact_id' => $sID,
+ * 'membership_type_id' => 2,
+ * 'membership_source' => $result['source'],
+ * 'status_id' => $result["status_id"],
+ * 'member_is_pay_later' => $result['is_pay_later'],
+ * 'owner_membership_id' => $result['id'],
+ * 'skipStatusCal' => 1,
+ * );
+ * if ( isset($result['join_date'] )) {
+ * $params["join_date"] = $result["join_date"];
+ * $params["start_date"] = $result["start_date"];
+ * $params["end_date"] = $result["end_date"];
+ * } else {
+ * $params["join_date"] = NULL;
+ * $params["end_date"] = NULL;
+ * $params["start_date"] = NULL;
+ * }
+ * $res2 = civicrm_api('Membership', 'create', $params);
+ * }
+ * //        Create $sId membership with $cId's membership id as owner_membership_id
+ * }
+ * }
+ * }
+ * }
+ * }
+ * }
+ **/
 /**
  * hook_civicrm_validateForm( $formName, &$fields, &$files, &$form, &$errors )
  * Description: Validation of forms. This hook was introduced in v4.2
@@ -396,41 +451,43 @@ function dignityusa_civicrm_postProcess( $formName, &$form) {
  * Returns
  * true if form validates successfully,
  * otherwise array with input field names as keys and error message strings as values
-**/
+ **/
 
-function dignityusa_civicrm_validateForm( $formName, &$fields, &$files, &$form, &$errors ) {
-    if ( $formName == 'CRM_Contribute_Form_Contribution_Main') {
+function dignityusa_civicrm_validateForm($formName, &$fields, &$files, &$form, &$errors)
+{
+    if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
         $fId = $form->getVar('_id');
-        if ($fId == 3 ) {
+        if ($fId == 3) {
 //            CRM_Core_Error::Debug('Fields',$fields);
 //            exit;    238
             if ($fields['price_97'] == 238) {
-                if ( strlen(trim($fields['spouseFirstName'])) == 0 ) {
+                if (strlen(trim($fields['spouseFirstName'])) == 0) {
                     $errors['spouseFirstName'] = ts('Spouse First Name required for Couple Membership');
                 }
-                if ( strlen(trim($fields['spouseLastName'])) == 0 ) {
+                if (strlen(trim($fields['spouseLastName'])) == 0) {
                     $errors['spouseLastName'] = ts('Spouse Last Name required for Couple Membership');
                 }
-                if ( strlen(trim($fields['spouseEmail'])) == 0) {
+                if (strlen(trim($fields['spouseEmail'])) == 0) {
                     $errors['spouseEmail'] = ts('Spouse Email required for Couple Membership');
                 }
             }
-            if (($fields['price_99'] != 0) && ($fields['price_97'] != 0) ) {
+            if (($fields['price_99'] != 0) && ($fields['price_97'] != 0)) {
                 $errors['price_99'] = ts('If you use the Additional Contribution field, please select No Thank You for Membership');
             }
         }
-        
-        if ($form->getVar('_id') == 32 ) {
+        if ($form->getVar('_id') == 32) {
 // Make sure that requested date is greater than today
             $reqDate = strtotime($fields['custom_33']);
             $todaysDate = strtotime(date('Y-m-d'));
-            if ( $reqDate <= $todaysDate ) {
+            if ($reqDate <= $todaysDate) {
                 $errors['custom_33'] = ts('Please request a date in the future.');
             }
             $specDate = date('Y-m-d', $reqDate);
-            $query = ts("SELECT * FROM civicrm_value_day_donation_10
-                        WHERE cast(donation_day_33 as date) = cast('" . $specDate ."' as date)");
-         
+            $query = ts(
+                "SELECT * FROM civicrm_value_day_donation_10
+                        WHERE cast(donation_day_33 as date) = cast('" . $specDate . "' as date)"
+            );
+
             $dao = &CRM_Core_DAO::executeQuery($query);
             while ($dao->fetch()) {
                 $errors['custom_33'] = ts('Date already claimed');
@@ -447,16 +504,17 @@ function dignityusa_civicrm_validateForm( $formName, &$fields, &$files, &$form, 
  *    This will be an empty array unless an implementation of hook_civicrm_tokens adds items to it
  */
 
-function dignityusa_civicrm_tokens(&$tokens) {
+function dignityusa_civicrm_tokens(&$tokens)
+{
     $tokens['donor'] = array(
         'donor.current_donation' => 'Donations: Curr Yr Detail',
         'donor.prior_donation' => 'Donations: Prior Yr Detail',
         'donor.total_current' => 'Donations: Curr Yr Total',
         'donor.total_prior' => 'Donations: Prior Yr Total',
         'donor.today' => 'Todays date',
-	'donor.lastcontribution_amount' => 'Amount of last contribution',
-	'donor.lastcontribution_date' => 'Date of last contribution',
-	'donor.lastcontribution_financial_type' => 'Financial type of last contribution',
+        'donor.lastcontribution_amount' => 'Amount of last contribution',
+        'donor.lastcontribution_date' => 'Date of last contribution',
+        'donor.lastcontribution_financial_type' => 'Financial type of last contribution',
     );
 }
 
@@ -464,29 +522,32 @@ function dignityusa_civicrm_tokens(&$tokens) {
  * hook_civicrm_tokenValues( &$values, $cids, $job = null, $tokens = array(), $context = null )
  */
 
-function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = array(), $context = null)
+{
     // Check to see if any of the donor tokens are needed
     if (!empty($tokens['donor'])) {
         //token maf_tokens.today
-	if (in_array('today', $tokens['donor']) || array_key_exists('today', $tokens['donor'])) {
-	    dignityusa_today($values, $cids, $job, $tokens,$context);
-	}
+        if (in_array('today', $tokens['donor']) || array_key_exists('today', $tokens['donor'])) {
+            dignityusa_today($values, $cids, $job, $tokens, $context);
+        }
         // - donor.lastcontribution_amount
         // - donor.lastcontribution_date
         // - donor.lastcontribution_financial_type
         if (in_array('lastcontribution_amount', $tokens['donor']) ||
             in_array('lastcontribution_date', $tokens['donor']) ||
-            in_array('lastcontribution_financial_type', $tokens['donor']) || 
+            in_array('lastcontribution_financial_type', $tokens['donor']) ||
             array_key_exists('lastcontribution_amount', $tokens['donor']) ||
             array_key_exists('lastcontribution_date', $tokens['donor']) ||
-            array_key_exists('lastcontribution_financial_type', $tokens['donor'])) {
-                dignityusa_lastcontribution($values, $cids, $job, $tokens, $context);
+            array_key_exists('lastcontribution_financial_type', $tokens['donor'])
+        ) {
+            dignityusa_lastcontribution($values, $cids, $job, $tokens, $context);
         }
 
         // Next check the current donation defail
         if (in_array('current_donation', $tokens['donor'])) {
             $contacts = implode(',', $cids);
-            $dao = &CRM_Core_DAO::executeQuery("
+            $dao = &CRM_Core_DAO::executeQuery(
+                "
         SELECT cc.contact_id, cc.total_amount, cc.receive_date, cc.check_number, cc.source, con.display_name, hon.display_name as honoree, pi.label AS payment_instrument, ht.label AS honor_type, cType.name as contrib_type
         FROM civicrm_contribution cc
         INNER JOIN civicrm_contact con ON con.id = cc.contact_id
@@ -517,7 +578,7 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
             <td style="padding-left: 4px;">' . date('m/d/Y', strtotime($dao->receive_date)) . '</td>
             <td>' . $dao->contrib_type . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
-                        . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
+                    . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
             <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
           </tr>';
                 $values[$cid]['donor.current_donation'] .= $row;
@@ -537,7 +598,8 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
         // Next check the current donation defail
         if (in_array('prior_donation', $tokens['donor'])) {
             $contacts = implode(',', $cids);
-            $dao = &CRM_Core_DAO::executeQuery("SELECT cc.contact_id, cc.total_amount, cc.receive_date, cc.check_number, cc.source, con.display_name, hon.display_name as honoree, pi.label AS payment_instrument, ht.label AS honor_type, cType.name as contrib_type
+            $dao = &CRM_Core_DAO::executeQuery(
+                "SELECT cc.contact_id, cc.total_amount, cc.receive_date, cc.check_number, cc.source, con.display_name, hon.display_name as honoree, pi.label AS payment_instrument, ht.label AS honor_type, cType.name as contrib_type
         FROM civicrm_contribution cc
         INNER JOIN civicrm_contact con ON con.id = cc.contact_id
         LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id )
@@ -567,7 +629,7 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
             <td style="padding-left: 4px;">' . date('m/d/Y', strtotime($dao->receive_date)) . '</td>
             <td>' . $dao->contrib_type . '</td>
             <td>' . ($dao->payment_instrument ? $dao->payment_instrument : 'In Kind')
-                        . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
+                    . ($dao->check_number ? ' #' . $dao->check_number : '') . '</td>
             <td style="padding-right: 4px;" align=right>$' . $dao->total_amount . '</td>
           </tr>';
                 $values[$cid]['donor.prior_donation'] .= $row;
@@ -584,44 +646,45 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
                 }
             }
         }
-        
+
         // Now for total current year
-        
-            if (in_array('total_current', $tokens['donor'])) {
-                $contacts = implode(',', $cids);
-                $dao = &CRM_Core_DAO::executeQuery("SELECT contact_id,
+
+        if (in_array('total_current', $tokens['donor'])) {
+            $contacts = implode(',', $cids);
+            $dao = &CRM_Core_DAO::executeQuery(
+                "SELECT contact_id,
                 sum( total_amount ) as total_amount
                 FROM   civicrm_contribution cc
                 LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id ) 
                 WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
             AND (YEAR(cc.receive_date) = YEAR(NOW())) and cc.contact_id IN ($contacts)
                 GROUP BY contact_id     "
-                ); 
-                
-                while ($dao->fetch()) {
-                    $cid = $dao->contact_id;
-                    $values[$cid]['donor.total_current'] = $dao->total_amount;
+            );
+
+            while ($dao->fetch()) {
+                $cid = $dao->contact_id;
+                $values[$cid]['donor.total_current'] = $dao->total_amount;
             }
-            
- 
+
+
         }
-    // Now for total prior year
-        
-            if (in_array('total_prior', $tokens['donor'])) {
-                $contacts = implode(',', $cids);
-                $dao = &CRM_Core_DAO::executeQuery(
-                                                   "SELECT contact_id,
+        // Now for total prior year
+
+        if (in_array('total_prior', $tokens['donor'])) {
+            $contacts = implode(',', $cids);
+            $dao = &CRM_Core_DAO::executeQuery(
+                "SELECT contact_id,
                                                    sum( total_amount ) as total_amount
                                                    FROM   civicrm_contribution cc
                                                    LEFT JOIN civicrm_financial_type cType ON ( cType.id = cc.financial_type_id )
                                                    WHERE  cc.is_test = 0 AND cType.is_deductible = 1 AND cc.contribution_status_id = 1
                                                    AND (YEAR(cc.receive_date) = YEAR(NOW())-1) and cc.contact_id IN ($contacts)
                                                    GROUP BY contact_id"
-                                                   ); 
+            );
 
-                while ($dao->fetch()) {
-                    $cid = $dao->contact_id;
-                    $values[$cid]['donor.total_prior'] = $dao->total_amount;
+            while ($dao->fetch()) {
+                $cid = $dao->contact_id;
+                $values[$cid]['donor.total_prior'] = $dao->total_amount;
             }
         }
     }
@@ -631,21 +694,23 @@ function dignityusa_civicrm_tokenValues(&$values, $cids, $job = null, $tokens = 
  * Returns the value of token donor.today
  */
 
-function dignityusa_today(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+function dignityusa_today(&$values, $cids, $job = null, $tokens = array(), $context = null)
+{
     if (!empty($tokens['donor'])) {
-	if (in_array('today', $tokens['donor']) || array_key_exists('today', $tokens['donor'])) {
-	    $today = new DateTime();
-	    foreach ($cids as $cid) {
-		$values[$cid]['donor.today'] = dignityusa_date_format($today);
-	    }
-	}
-  }
+        if (in_array('today', $tokens['donor']) || array_key_exists('today', $tokens['donor'])) {
+            $today = new DateTime();
+            foreach ($cids as $cid) {
+                $values[$cid]['donor.today'] = dignityusa_date_format($today);
+            }
+        }
+    }
 }
 
 /*
  * Formats date to Monthname Day, Year
  */
-function dignityusa_date_format($date) {
+function dignityusa_date_format($date)
+{
     $str = $date->format('F') . ' ' . $date->format('j') . ', ' . $date->format('Y');
     return $str;
 }
@@ -656,39 +721,46 @@ function dignityusa_date_format($date) {
  * - donor.lastcontribution_date
  * - donor.lastcontribution_financial_type
  */
-function dignityusa_lastcontribution(&$values, $cids, $job = null, $tokens = array(), $context = null) {
+function dignityusa_lastcontribution(&$values, $cids, $job = null, $tokens = array(), $context = null)
+{
     $contacts = implode(',', $cids);
-    if (!empty($tokens['donor'])) {		
-	if ((in_array('lastcontribution_amount', $tokens['donor'])) ||
+    if (!empty($tokens['donor'])) {
+        if ((in_array('lastcontribution_amount', $tokens['donor'])) ||
             (in_array('lastcontribution_date', $tokens['donor'])) ||
-            (in_array('lastcontribution_financial_type', $tokens['donor']))) {
-	    $dao = &CRM_Core_DAO::executeQuery("
+            (in_array('lastcontribution_financial_type', $tokens['donor']))
+        ) {
+            $dao = &CRM_Core_DAO::executeQuery(
+                "
 			SELECT cc.*, ft.name as financial_type
 			FROM civicrm_contribution as cc LEFT JOIN civicrm_financial_type ft ON cc.financial_type_id = ft.id
 			WHERE cc.is_test = 0 AND 
 			receive_date = (SELECT max(receive_date) FROM civicrm_contribution c2 WHERE c2.contact_id = cc.contact_id AND c2.contribution_status_id = 1)
 			AND cc.contact_id IN ($contacts)
-	    ");
-			
-	    while ($dao->fetch()) {
-		$cid = $dao->contact_id;
-		if (in_array($cid, $cids)) {
-		    if (in_array('lastcontribution_amount', $tokens['donor']) ||
-                        array_key_exists('lastcontribution_amount', $tokens['donor'])) {
-			    $amount = (float) $dao->total_amount;
-			    $values[$cid]['donor.lastcontribution_amount'] = '$' . number_format($amount, 2, '.', ',');
-		    }
-		    if (in_array('lastcontribution_date', $tokens['donor']) ||
-                        array_key_exists('lastcontribution_date', $tokens['donor'])) {
-			    $date = new DateTime($dao->receive_date);
-                            $values[$cid]['donor.lastcontribution_date'] = dignityusa_date_format($date);
-		    }
-		    if (in_array('lastcontribution_financial_type', $tokens['donor']) ||
-                        array_key_exists('lastcontribution_financial_type', $tokens['donor'])) {
-			    $values[$cid]['donor.lastcontribution_financial_type'] = $dao->financial_type;
-		    }
-		}
-	    }
-	}
+	    "
+            );
+
+            while ($dao->fetch()) {
+                $cid = $dao->contact_id;
+                if (in_array($cid, $cids)) {
+                    if (in_array('lastcontribution_amount', $tokens['donor']) ||
+                        array_key_exists('lastcontribution_amount', $tokens['donor'])
+                    ) {
+                        $amount = (float)$dao->total_amount;
+                        $values[$cid]['donor.lastcontribution_amount'] = '$' . number_format($amount, 2, '.', ',');
+                    }
+                    if (in_array('lastcontribution_date', $tokens['donor']) ||
+                        array_key_exists('lastcontribution_date', $tokens['donor'])
+                    ) {
+                        $date = new DateTime($dao->receive_date);
+                        $values[$cid]['donor.lastcontribution_date'] = dignityusa_date_format($date);
+                    }
+                    if (in_array('lastcontribution_financial_type', $tokens['donor']) ||
+                        array_key_exists('lastcontribution_financial_type', $tokens['donor'])
+                    ) {
+                        $values[$cid]['donor.lastcontribution_financial_type'] = $dao->financial_type;
+                    }
+                }
+            }
+        }
     }
 }
