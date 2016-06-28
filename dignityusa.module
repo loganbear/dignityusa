@@ -165,15 +165,17 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
             'sequential' => 1,
             'id' => $id,
         );
+        CRM_Core_Error::debug_var('Contribution getsingle', $apiParams, TRUE, TRUE);
         $Contrib = civicrm_api('Contribution', 'getsingle', $apiParams);
 
-        if ($Contrib['financial_type_id'] == 7 || $Contrib['financial_type_id'] == 2) {
+        if ($Contrib['financial_type_id'] == 2) {
             $apiParams = array(
                 'version' => 3,
                 'sequential' => 1,
                 'contact_id' => $Contrib['contact_id'],
                 'return' => 'custom_1',
             );
+            CRM_Core_Error::debug_var('Contact getsingle', $apiParams, TRUE, TRUE);
             $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
             $chapterName = $contactInfo["custom_1"]["0"];
 //            CRM_Core_Error::debug('Chapter Name', $chapterName);
@@ -186,9 +188,19 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
                 'entity_id' => $id,
                 'custom_5' => $chapterName,
             );
+            CRM_Core_Error::debug_var('CustomValue create', $apiParams, TRUE, TRUE);
+            
+            try {
             $results = civicrm_api("CustomValue", "create", $apiParams);
+            }
+            catch (Exception $e) {
+                CRM_Core_Error::debug_log_message($e->getMessage());
+                CRM_Core_Error::debug_var('entity_id', $id, TRUE, TRUE);
+                CRM_Core_Error::debug_var('chapterName', $chapterName, TRUE, TRUE);
+            }
 
         }
+
     } elseif ($objectName == 'FinancialItem') {
         // Check for Member Dues Financial Item record to create a possible Chapter
         // Member Dues Entity Financial Trxn record
@@ -215,15 +227,14 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
             );
             
             // check for Chapter Member Dues line item
+            try {
             $chapterLineItem = civicrm_api3('LineItem', 'getsingle', array(
                 'sequential' => 1,
                 'contribution_id' => $lineItem['contribution_id'],
                 'financial_type_id' => "Chapter Member Dues",
                 )
             );
-            
-            if ($chapterLineItem['is_error'] == 0) {
-                // Okay - we have the chapter member dues line item
+            // Okay - we have the chapter member dues line item
                 // Now use its id to find the financial item record
                 $chapterFinItem = civicrm_api3('FinancialItem', 'getsingle' ,array(
                     'sequential' => 1,
@@ -240,6 +251,9 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
                     'amount' => $chapterFinItem['amount'],
                     )
                 );
+            }
+            catch (Exception $e) {
+                CRM_Core_Error::debug_log_message($e->getMessage());
             }
         }        
     }
