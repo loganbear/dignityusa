@@ -325,6 +325,10 @@ function dignityusa_civicrm_buildForm($formName, &$form)
                 $form->freeze('custom_5');
             }
         }
+    } elseif ($form->getVar('_id') == 37 ) {
+        $defaults['is_recur'] = true;
+        $form->setDefaults($defaults);
+        $form->freeze('is_recur');
     }
 }
 
