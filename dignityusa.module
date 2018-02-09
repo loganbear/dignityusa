@@ -212,45 +212,50 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
                                );
         // Now make sure that it's a Member Dues record
         if ($finItem['financial_account_id'] == 2) {
-            // Get the Line Item record
+             // Get the Line Item record
             $lineItem = civicrm_api3('LineItem', 'getsingle', array(
                 'sequential' => 1,
                 'id' => $finItem['entity_id'],
                 )
             );
-            // Get the entity table record for the transaction id
-            $entityRec = civicrm_api3('EntityFinancialTrxn', 'getsingle', array(
-                'sequential' => 1,
-                'entity_id' => $id,
-                'entity_table' => "civicrm_financial_item",
-                )
-            );
-            
-            // check for Chapter Member Dues line item
             try {
-            $chapterLineItem = civicrm_api3('LineItem', 'getsingle', array(
-                'sequential' => 1,
-                'contribution_id' => $lineItem['contribution_id'],
-                'financial_type_id' => "Chapter Member Dues",
-                )
-            );
-            // Okay - we have the chapter member dues line item
-                // Now use its id to find the financial item record
-                $chapterFinItem = civicrm_api3('FinancialItem', 'getsingle' ,array(
+                // Get the entity table record for the transaction id
+                $entityRec = civicrm_api3('EntityFinancialTrxn', 'getsingle', array(
                     'sequential' => 1,
-                    'entity_id' => $chapterLineItem['id'],
-                    'entity_table' => 'civicrm_line_item',
+                    'entity_id' => $id,
+                    'entity_table' => "civicrm_financial_item",
                     )
                 );
                 
-                $result = civicrm_api3('EntityFinancialTrxn', 'create', array(
+                // check for Chapter Member Dues line item
+                try {
+                $chapterLineItem = civicrm_api3('LineItem', 'getsingle', array(
                     'sequential' => 1,
-                    'entity_table' => "civicrm_financial_item",
-                    'entity_id' => $chapterFinItem['id'],
-                    'financial_trxn_id' => $entityRec['financial_trxn_id'],
-                    'amount' => $chapterFinItem['amount'],
+                    'contribution_id' => $lineItem['contribution_id'],
+                    'financial_type_id' => "Chapter Member Dues",
                     )
                 );
+                // Okay - we have the chapter member dues line item
+                    // Now use its id to find the financial item record
+                    $chapterFinItem = civicrm_api3('FinancialItem', 'getsingle' ,array(
+                        'sequential' => 1,
+                        'entity_id' => $chapterLineItem['id'],
+                        'entity_table' => 'civicrm_line_item',
+                        )
+                    );
+                    
+                    $result = civicrm_api3('EntityFinancialTrxn', 'create', array(
+                        'sequential' => 1,
+                        'entity_table' => "civicrm_financial_item",
+                        'entity_id' => $chapterFinItem['id'],
+                        'financial_trxn_id' => $entityRec['financial_trxn_id'],
+                        'amount' => $chapterFinItem['amount'],
+                        )
+                    );
+                }
+                catch (Exception $e) {
+                    CRM_Core_Error::debug_log_message($e->getMessage());
+                }
             }
             catch (Exception $e) {
                 CRM_Core_Error::debug_log_message($e->getMessage());
@@ -329,6 +334,14 @@ function dignityusa_civicrm_buildForm($formName, &$form)
         $defaults['is_recur'] = true;
         $form->setDefaults($defaults);
         $form->freeze('is_recur');
+    } elseif ($form->getVar('_id') == 55 && $formName == 'CRM_Contribute_Form_Contribution_Main' ) {
+        $defaults['custom_104'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+        $refCode = $_GET["refCode"];
+        if (isset($refCode)) {
+            $defaults['custom_104'] = $refCode;
+        }
+            
+        $form->setDefaults($defaults);
     }
 }
 
@@ -478,17 +491,17 @@ function dignityusa_civicrm_validateForm($formName, &$fields, &$files, &$form, &
         if ($fId == 3) {
 //            CRM_Core_Error::Debug('Fields',$fields);
 //            exit;    238
-            if ($fields['price_97'] == 238) {
-                if (strlen(trim($fields['spouseFirstName'])) == 0) {
-                    $errors['spouseFirstName'] = ts('Spouse First Name required for Couple Membership');
-                }
-                if (strlen(trim($fields['spouseLastName'])) == 0) {
-                    $errors['spouseLastName'] = ts('Spouse Last Name required for Couple Membership');
-                }
-                if (strlen(trim($fields['spouseEmail'])) == 0) {
-                    $errors['spouseEmail'] = ts('Spouse Email required for Couple Membership');
-                }
-            }
+//            if ($fields['price_97'] == 238) {
+//                if (strlen(trim($fields['spouseFirstName'])) == 0) {
+//                    $errors['spouseFirstName'] = ts('Spouse First Name required for Couple Membership');
+//                }
+//                if (strlen(trim($fields['spouseLastName'])) == 0) {
+//                    $errors['spouseLastName'] = ts('Spouse Last Name required for Couple Membership');
+//                }
+//                if (strlen(trim($fields['spouseEmail'])) == 0) {
+//                    $errors['spouseEmail'] = ts('Spouse Email required for Couple Membership');
+//                }
+//            }
             if (($fields['price_99'] != 0) && ($fields['price_97'] != 0)) {
                 $errors['price_99'] = ts('If you use the Additional Contribution field, please select No Thank You for Membership');
             }
