@@ -48,13 +48,17 @@ $custom_field = array('chapter_name' => 'custom_5');
  * None
  */
 
+
+
 function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
 {
     if ($objectName == 'LineItem' && $op == 'create') {
         if ($params["financial_type_id"] == 2 && ($params['unit_price'] == 50 || $params['unit_price'] == 100)) {
-//            CRM_Core_Error::debug('Object Params',$params);
-//            exit;
-            // Look for Contribution
+           Civi::log()->debug(__FUNCTION__);
+           Civi::log()->debug($params['contribution_id']);
+
+
+//             Look for Contribution
             try {
                 $contribInfo = civicrm_api3(
                     'Contribution', "getsingle", array(
@@ -65,22 +69,26 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
             } catch (CiviCRM_API3_Exception $e) {
                 $error = $e->getMessage();
             }
+            Civi::log()->debug($contribInfo['contact_id']);
+
+
             // Look for the Donor
             $contactInfo = civicrm_api3(
                 'Contact', 'getsingle', array(
                              'sequential' => 1,
                              'id' => $contribInfo['contact_id'],
-                             'return' => 'custom_1',
+                             'return' => array("custom_1"),
                          )
             );
             $chapterName = $contactInfo['custom_1']['0'];
+           Civi::log()->debug($chapterName);
 
             // Get Chapter Record
             try {
                 $chapterInfo = civicrm_api3(
                     "Contact", 'getsingle', array(
                                  'sequential' => 1,
-                                 'return' => "custom_39",
+                                 'return' => array("custom_39"),
                                  'organization_name' => $chapterName,
                                  'contact_type' => 'Organization',
                              )
@@ -90,7 +98,9 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
             }
 
 
+
             $chapterShare = $chapterInfo["custom_39"];
+            Civi::log()->debug($chapterShare);
 
             // Remove Chapter share of membership
             if ($params['unit_price'] == 50) {  // Single
@@ -105,36 +115,39 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                 $amtChg = 0;
             }
 
+            Civi::log()->debug($objectName);
             if ($amtChg != 0) {
                 $params['line_total'] = $params['unit_price'] - $amtChg;
                 $params['unit_price'] = $params['line_total'];
                 $params['qty'] = 1;
-                $newParams = array(
-                    'entity_table' => 'civicrm_contribution',
-                    'entity_id' => $params['entity_id'],
-                    'contribution_id' => $params['contribution_id'],
-                    'price_field_id' => 101,      // price_field for Chapter Member Dues (civicrm_price_field_id_)
-                    'label' => $chapterName,
-                    'qty' => 1,
-                    'unit_price' => $amtChg,
-                    'line_total' => $amtChg,
-                    'participant_count' => 0,
-                    'price_field_value_id' => 243,     // value for Chapter Member (civicrm_price_field_value_id)
-                    'financial_type_id' => 8,
-                    'sequential' => 1,
-                );
-                $result = civicrm_api3('LineItem', 'create', $newParams);
-  //              CRM_Core_Error::debug_var('Line Item Result', $result, TRUE, TRUE);
-                if ($result['is_error'] != 0) {
-                    //                       CRM_Core_Error::debug('New Line Item Create', $newParams);
-                    //                       CRM_Core_Error::debug('Result', $result);
-                    exit;
+
+                try {
+                  $result = civicrm_api3('LineItem',
+                                         'create',
+                                         array('entity_table'         => "civicrm_contribution",
+                                               'entity_id'            => $params['entity_id'],
+                                               'contribution_id'      => $params['contribution_id'],
+                                               'price_field_id'       => 101,
+                                               'label'                => $chapterName,
+                                               'qty'                  => 1,
+                                               'unit_price'           => $amtChg,
+                                               'line_total'           => $amtChg,
+                                               'price_field_value_id' => 243,
+                                               'financial_type_id'    => "Chapter Member Dues",
+                                               'sequential'           => 1,
+                                              )
+                                        );
+                } catch (CiviCRM_API3_Exception $e) {
+                    $error = $e->getMessage();
                 }
 
+
+            Civi::log()->debug($op);
                 // Create new Financial Item for new Line Item
                 if (isset($result['values']['0']['id'])) {
                     $newID = $result['values']['0']['id'];
 
+                    try {
                     $result = civicrm_api3(
                         'FinancialItem', 'create', array(
                             'sequential' => 1,
@@ -149,6 +162,10 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                             'amount' => $amtChg,
                         )
                     );
+                    } catch (CiviCRM_API3_Exception $e) {
+                        $error = $e->getMessage();
+                    }
+
                 }
             }
         }
@@ -165,38 +182,29 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
             'sequential' => 1,
             'id' => $id,
         );
-        CRM_Core_Error::debug_var('Contribution getsingle', $apiParams, TRUE, TRUE);
+
         $Contrib = civicrm_api('Contribution', 'getsingle', $apiParams);
 
         if ($Contrib['financial_type_id'] == 2) {
             $apiParams = array(
-                'version' => 3,
                 'sequential' => 1,
                 'contact_id' => $Contrib['contact_id'],
-                'return' => 'custom_1',
+                'return' => array("custom_1"),
             );
-            CRM_Core_Error::debug_var('Contact getsingle', $apiParams, TRUE, TRUE);
-            $contactInfo = civicrm_api('Contact', 'getsingle', $apiParams);
+            $contactInfo = civicrm_api3('Contact', 'getsingle', $apiParams);
             $chapterName = $contactInfo["custom_1"]["0"];
-//            CRM_Core_Error::debug('Chapter Name', $chapterName);
-//            CRM_Core_Error::debug('Contact Info', $contactInfo);
-//            CRM_Core_Error::debug('Contribution', $Contrib);
-//            exit;
+
             $apiParams = array(
-                'version' => 3,
                 'sequential' => 1,
                 'entity_id' => $id,
                 'custom_5' => $chapterName,
             );
-            CRM_Core_Error::debug_var('CustomValue create', $apiParams, TRUE, TRUE);
 
             try {
-            $results = civicrm_api("CustomValue", "create", $apiParams);
+            $results = civicrm_api3("CustomValue", "create", $apiParams);
             }
             catch (Exception $e) {
-                CRM_Core_Error::debug_log_message($e->getMessage());
-                CRM_Core_Error::debug_var('entity_id', $id, TRUE, TRUE);
-                CRM_Core_Error::debug_var('chapterName', $chapterName, TRUE, TRUE);
+              $error = $e->getMessage();
             }
 
         }
@@ -254,15 +262,14 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
                     );
                 }
                 catch (Exception $e) {
-                    CRM_Core_Error::debug_log_message($e->getMessage());
                 }
             }
             catch (Exception $e) {
-                CRM_Core_Error::debug_log_message($e->getMessage());
             }
         }
     }
 }
+
 
 /**
  * This hook is invoked when building a CiviCRM form.
