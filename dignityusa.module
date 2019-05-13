@@ -53,9 +53,9 @@ $custom_field = array('chapter_name' => 'custom_5');
 function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
 {
     if ($objectName == 'LineItem' && $op == 'create') {
-        if ($params["financial_type_id"] == 2 && ($params['unit_price'] == 50 || $params['unit_price'] == 100)) {
-           Civi::log()->debug(__FUNCTION__);
-           Civi::log()->debug($params['contribution_id']);
+        if ($params["financial_type_id"] == 2 && ($params['unit_price'] == 50 || $params['unit_price'] == 100) && isset($params['contribution_id']) ) {
+//           Civi::log()->debug(__FUNCTION__);
+//           Civi::log()->debug($params['contribution_id']);
 
 
 //             Look for Contribution
@@ -69,7 +69,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
             } catch (CiviCRM_API3_Exception $e) {
                 $error = $e->getMessage();
             }
-            Civi::log()->debug($contribInfo['contact_id']);
+//            Civi::log()->debug($contribInfo['contact_id']);
 
 
             // Look for the Donor
@@ -81,7 +81,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                          )
             );
             $chapterName = $contactInfo['custom_1']['0'];
-           Civi::log()->debug($chapterName);
+//           Civi::log()->debug($chapterName);
 
             // Get Chapter Record
             try {
@@ -100,7 +100,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
 
 
             $chapterShare = $chapterInfo["custom_39"];
-            Civi::log()->debug($chapterShare);
+//            Civi::log()->debug($chapterShare);
 
             // Remove Chapter share of membership
             if ($params['unit_price'] == 50) {  // Single
@@ -115,7 +115,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                 $amtChg = 0;
             }
 
-            Civi::log()->debug($objectName);
+//            Civi::log()->debug($objectName);
             if ($amtChg != 0) {
                 $params['line_total'] = $params['unit_price'] - $amtChg;
                 $params['unit_price'] = $params['line_total'];
@@ -142,7 +142,7 @@ function dignityusa_civicrm_pre($op, $objectName, $id, &$params)
                 }
 
 
-            Civi::log()->debug($op);
+//            Civi::log()->debug($op);
                 // Create new Financial Item for new Line Item
                 if (isset($result['values']['0']['id'])) {
                     $newID = $result['values']['0']['id'];
@@ -283,72 +283,80 @@ function dignityusa_civicrm_post($op, $objectName, $id, &$params)
 
 function dignityusa_civicrm_buildForm($formName, &$form)
 {
-    if ($form->getVar('_id') == 3) {
-        if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
-//            CRM_Core_Error::debug('Form', $form);
-//            exit;
-            // Assumes templates are in a templates folder relative to this file
-            $templatePath = realpath(dirname(__FILE__) . "/templates");
-            // Add fields
-            $form->add('group', 'spouseInfo', ts('Spouse Information'));
-            $form->add('text', 'spouseFirstName', ts('Spouse First Name'));
-            $form->add('text', 'spouseLastName', ts('Spouse Last Name'));
-            $form->add('text', 'spouseEmail', ts('Spouse Email'));
-            $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');
-            CRM_Core_Region::instance('page-body')->add(array('template' => "{$templatePath}/spouseInfo.tpl"));
-        } elseif
-        (($formName == 'CRM_Contribute_Form_Contribution_Confirm') ||
-            ($formName == 'CRM_Contribute_Form_Contribution_ThankYou')
-        ) {
-            $defaults = array();
-            $sFirst = $form->_params["spouseFirstName"];
-            $sLast = $form->_params["spouseLastName"];
-            $sEmail = $form->_params["spouseEmail"];
-            $form->_values["spouseFirstName"] = $sFirst;
-            $form->_values["spouseLastName"] = $sLast;
-            $form->_values["spouseEmail"] = $sEmail;
-            $form->add('group', 'spouseInfo', ts('Spouse Information'));
-            $form->add('text', 'spouseFirstName', ts('Spouse First Name'), $sFirst);
-            $form->add('text', 'spouseLastName', ts('Spouse Last Name'), $sLast);
-            $form->add('text', 'spouseEmail', ts('Spouse Email'), $sEmail);
-            $defaults['spouseFirstName'] = $sFirst;
-            $defaults['spouseLastName'] = $sLast;
-            $defaults['spouseEmail'] = $sEmail;
-            $form->setDefaults($defaults);
-//            CRM_Core_Error::debug('Form', $form);
-//            exit;
-
-        }
-    } elseif ($form->getVar('_id') == 31) {
-        $chNum = $_GET["chNum"];
-        if (isset($chNum)) {
-//        CRM_Core_Error::debug('Chapter Number', $chNum);
-//        exit;
-            $params = array(
-                'version' => 3,
-                'sequential' => 1,
-                'id' => $chNum,
-                'option_group_id' => 74,
-            );
-            $result = civicrm_api('OptionValue', 'getsingle', $params);
-            if ($result['is_error'] == 0) {
-                $defaults['custom_5'] = $result['value'];
-                $form->setDefaults($defaults);
-                $form->freeze('custom_5');
-            }
-        }
-    } elseif ($formName == 'CRM_Contribute_Form_Contribution_Main' && $form->getVar('_id') == 37 ) {
-        $defaults['is_recur'] = true;
-        $form->setDefaults($defaults);
-        $form->freeze('is_recur');
-    } elseif ($form->getVar('_id') == 55 && $formName == 'CRM_Contribute_Form_Contribution_Main' ) {
-        $defaults['custom_104'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+    $refField = $form->getVar('custom104');
+    if (isset($refField)) {
         $refCode = $_GET["refCode"];
         if (isset($refCode)) {
             $defaults['custom_104'] = $refCode;
         }
 
-        $form->setDefaults($defaults);
+        $form->setDefaults($defaults);       
+    }
+    switch($form->getVar('_id')) {
+/*        case 3:
+            if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+                // Assumes templates are in a templates folder relative to this file
+                $templatePath = realpath(dirname(__FILE__) . "/templates");
+                // Add fields
+                $form->add('group', 'spouseInfo', ts('Spouse Information'));
+                $form->add('text', 'spouseFirstName', ts('Spouse First Name'));
+                $form->add('text', 'spouseLastName', ts('Spouse Last Name'));
+                $form->add('text', 'spouseEmail', ts('Spouse Email'));
+                $form->addRule("spouseEmail", ts('Email is not valid.'), 'email');
+                CRM_Core_Region::instance('page-body')->add(array('template' => "{$templatePath}/spouseInfo.tpl"));
+            } elseif (($formName == 'CRM_Contribute_Form_Contribution_Confirm') ||
+                ($formName == 'CRM_Contribute_Form_Contribution_ThankYou') ) {
+                    $defaults = array();
+                    $sFirst = $form->_params["spouseFirstName"];
+                    $sLast = $form->_params["spouseLastName"];
+                    $sEmail = $form->_params["spouseEmail"];
+                    $form->_values["spouseFirstName"] = $sFirst;
+                    $form->_values["spouseLastName"] = $sLast;
+                    $form->_values["spouseEmail"] = $sEmail;
+                    $form->add('group', 'spouseInfo', ts('Spouse Information'));
+                    $form->add('text', 'spouseFirstName', ts('Spouse First Name'), $sFirst);
+                    $form->add('text', 'spouseLastName', ts('Spouse Last Name'), $sLast);
+                    $form->add('text', 'spouseEmail', ts('Spouse Email'), $sEmail);
+                    $defaults['spouseFirstName'] = $sFirst;
+                    $defaults['spouseLastName'] = $sLast;
+                    $defaults['spouseEmail'] = $sEmail;
+                    $form->setDefaults($defaults);
+        //            CRM_Core_Error::debug('Form', $form);
+        //            exit;
+
+            }
+            break;  */
+        case 31:   // Support Your Local Chapter
+            $chNum = $_GET["chNum"];
+            if (isset($chNum)) {
+                $params = array(
+                    'version' => 3,
+                    'sequential' => 1,
+                    'id' => $chNum,
+                    'option_group_id' => 74,
+                );
+                $result = civicrm_api('OptionValue', 'getsingle', $params);
+                if ($result['is_error'] == 0) {
+                    $defaults['custom_5'] = $result['value'];
+                    $form->setDefaults($defaults);
+                    $form->freeze('custom_5');
+                }
+            }
+            break;
+        case 37:  // Guardian Angel
+            if ($formName == 'CRM_Contribute_Form_Contribution_Main') {
+                $defaults['is_recur'] = true;
+                $form->setDefaults($defaults);
+                $form->freeze('is_recur');
+            }
+            break;
+        case 62:    // Gift of Dignity
+            if ( $formName == 'CRM_Contribute_Form_Contribution_Main' ) {
+    // Modify the classes/attributes for country and state fields so the country dropdown will dynamically update the state dropdown
+                $form->updateElementAttr('custom_114', array('class' => 'crm-select2 crm-chain-select-target crm-form-select', 'data-callback' => 'civicrm/ajax/jqState', 'data-name' => 'custom_114', 'data-select-prompt' => '- select -', 'data-empty-prompt' => 'Choose country first', 'data-none-prompt' => '- N/A -'));
+                $form->updateElementAttr('custom_113', array('class' => 'crm-select2 crm-chain-select-control crm-form-select', 'data-target="custom_114"', 'placeholder' => '- select -'));
+            }
+            break;
     }
 }
 
